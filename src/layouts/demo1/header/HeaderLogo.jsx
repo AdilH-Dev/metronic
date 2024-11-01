@@ -14,15 +14,18 @@ const HeaderLogo = () => {
   const handleMegaMenuOpen = () => {
     setMobileMegaMenuOpen(true);
   };
-  return <div className="flex gap-1 lg:hidden items-center">
+  return <div className="flex gap-1 items-center">
+    {/* remove lg:hidden on above div */}
       <Link to="/" className="shrink-0">
-        <img src={toAbsoluteUrl('/media/app/mini-logo.svg')} className="h-[25px]" alt="mini-logo" />
+        <img src={toAbsoluteUrl('/media/app/default-logo-dark.svg')} className="h-[25px]" alt="mini-logo" />
+      {/* change mini logo to default logo dark */}
       </Link>
 
+
       <div className="flex items-center">
-        <button type="button" className="btn btn-icon btn-light btn-clear btn-sm" onClick={handleSidebarOpen}>
+        {/* <button type="button" className="btn btn-icon btn-light btn-clear btn-sm" onClick={handleSidebarOpen}>
           <KeenIcon icon="menu" />
-        </button>
+        </button> */}
 
         {megaMenuEnabled && <button type="button" className="btn btn-icon btn-light btn-clear btn-sm" onClick={handleMegaMenuOpen}>
             <KeenIcon icon="burger-menu-2" />

@@ -50,13 +50,13 @@
 		display: none;
 	}
 	
-	.demo1.sidebar-fixed .wrapper {
+	/* .demo1.sidebar-fixed .wrapper {
 		padding-left: var(--tw-sidebar-width);
-	}
+	} */
 	
-	.demo1.sidebar-fixed.header-fixed .header {
+	/* .demo1.sidebar-fixed.header-fixed .header {
 		left: var(--tw-sidebar-width);		
-	}
+	} */
 	
 	.demo1.sidebar-fixed.header-fixed .wrapper {
 		padding-top: var(--tw-header-height);

@@ -20,14 +20,14 @@ const HeaderTopbar = () => {
     setSearchModalOpen(false);
   };
   return <div className="flex items-stretch gap-1 lg:gap-3.5">
-      <div className="flex items-center">
+      {/* <div className="flex items-center">
         <button onClick={handleOpen} className="btn btn-icon btn-icon-lg size-9 rounded-full hover:bg-primary-light hover:text-primary text-gray-500">
           <KeenIcon icon="magnifier" />
         </button>
         <ModalSearch open={searchModalOpen} onClose={handleClose} />
-      </div>
+      </div> */}
 
-      <Menu className="items-stretch">
+      {/* <Menu className="items-stretch">
         <MenuItem ref={itemChatRef} onShow={handleShow} toggle="dropdown" trigger="click" dropdownProps={{
         placement: 'bottom-end',
         modifiers: [{
@@ -47,9 +47,9 @@ const HeaderTopbar = () => {
           menuTtemRef: itemChatRef
         })}
         </MenuItem>
-      </Menu>
+      </Menu> */}
 
-      <Menu className="items-stretch">
+      {/* <Menu className="items-stretch">
         <MenuItem ref={itemAppsRef} toggle="dropdown" trigger="click" dropdownProps={{
         placement: 'bottom-end',
         modifiers: [{
@@ -67,9 +67,9 @@ const HeaderTopbar = () => {
 
           {DropdownApps()}
         </MenuItem>
-      </Menu>
+      </Menu> */}
 
-      <Menu className="items-stretch">
+      {/* <Menu className="items-stretch">
         <MenuItem ref={itemNotificationsRef} toggle="dropdown" trigger="click" dropdownProps={{
         placement: 'bottom-end',
         modifiers: [{
@@ -88,7 +88,7 @@ const HeaderTopbar = () => {
           menuTtemRef: itemNotificationsRef
         })}
         </MenuItem>
-      </Menu>
+      </Menu> */}
 
       <Menu className="items-stretch -me-2">
         <MenuItem toggle="dropdown" trigger="click" dropdownProps={{

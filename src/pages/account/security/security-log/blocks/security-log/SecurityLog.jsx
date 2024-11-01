@@ -15,7 +15,7 @@ const SecurityLog = () => {
   }, {
     accessorFn: row => row.eventType,
     id: 'eventType',
-    header: () => 'Event Type',
+    header: () => 'Status',
     enableSorting: true,
     cell: info => <div className="flex items-center gap-1.5">
             <KeenIcon icon={info.row.original.eventType.icon.name} className={`text-lg ${info.row.original.eventType.icon.variant}`} />
@@ -29,7 +29,7 @@ const SecurityLog = () => {
   }, {
     accessorFn: row => row.actionTaken,
     id: 'actionTaken',
-    header: () => 'Action Taken',
+    header: () => 'Email',
     enableSorting: true,
     cell: info => info.getValue(),
     meta: {
@@ -38,7 +38,7 @@ const SecurityLog = () => {
   }, {
     accessorFn: row => row.sourceIp,
     id: 'sourceIp',
-    header: () => 'Source IP',
+    header: () => 'Sending',
     enableSorting: true,
     cell: info => info.getValue(),
     meta: {
@@ -47,7 +47,7 @@ const SecurityLog = () => {
   }, {
     accessorFn: row => row.destinationIp,
     id: 'destinationIp',
-    header: () => 'Destination IP',
+    header: () => 'Receiving',
     enableSorting: true,
     cell: info => info.getValue(),
     meta: {
@@ -56,7 +56,7 @@ const SecurityLog = () => {
   }, {
     accessorFn: row => row.severity,
     id: 'severity',
-    header: () => 'Severity',
+    header: () => 'API',
     enableSorting: true,
     cell: info => <span className={`badge badge-sm badge-outline ${info.row.original.severity.variant}`}>
             {info.row.original.severity.label}
@@ -64,27 +64,29 @@ const SecurityLog = () => {
     meta: {
       className: 'min-w-[110px]'
     }
-  }, {
+  }, 
+  {
     id: 'click',
     header: () => '',
     enableSorting: false,
     cell: () => <button className="btn btn-icon btn-light btn-clear btn-sm">
-            <KeenIcon icon="notepad" />
+            {/* <KeenIcon icon="notepad" /> */}
           </button>,
     meta: {
       className: 'w-[60px]'
     }
-  }], []);
+  }
+], []);
   const data = useMemo(() => SecurityLogData, []);
   return <div className="card card-grid min-w-full">
       <div className="card-header py-5 flex-wrap">
         <h3 className="card-title">Security Log</h3>
-        <label className="switch switch-sm">
+        {/* <label className="switch switch-sm">
           <input name="check" type="checkbox" value="1" defaultChecked className="order-2" readOnly />
           <span className="switch-label order-1">
             Push Alerts
           </span>
-        </label>
+        </label> */}
       </div>
 
       <div className="card-body">

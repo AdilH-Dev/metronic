@@ -5,15 +5,9 @@ import { useMenuCurrentItem } from '@/components/menu';
 import { Content, Footer, Header, Sidebar, useDemo1Layout } from '../';
 import { useMenus } from '@/providers';
 const Main = () => {
-  const {
-    layout
-  } = useDemo1Layout();
-  const {
-    pathname
-  } = useLocation();
-  const {
-    getMenuConfig
-  } = useMenus();
+  const { layout } = useDemo1Layout();
+  const { pathname } = useLocation();
+  const { getMenuConfig } = useMenus();
   const menuConfig = getMenuConfig('primary');
   const menuItem = useMenuCurrentItem(pathname, menuConfig);
   useEffect(() => {
@@ -44,14 +38,16 @@ const Main = () => {
       clearTimeout(timer);
     };
   }, []);
-  return <Fragment>
+  return (
+    <Fragment>
       <Helmet>
         <title>{menuItem?.title}</title>
       </Helmet>
 
       <div className="flex grow">
-        <Sidebar />
-
+        {/* <Sidebar /> */}
+        {/* remove side bar   */}
+        {/*  remove wrapper class */}
         <div className="wrapper flex grow flex-col">
           <Header />
 
@@ -60,6 +56,7 @@ const Main = () => {
           <Footer />
         </div>
       </div>
-    </Fragment>;
+    </Fragment>
+  );
 };
 export { Main };
