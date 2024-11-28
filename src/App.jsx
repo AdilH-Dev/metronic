@@ -3,6 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { useSettings } from './providers/SettingsProvider';
 import { AppRouting } from './routing';
 import { PathnameProvider } from './providers';
+import { Toast } from './components/toast/Toast';
 const {
   BASE_URL
 } = import.meta.env;
@@ -17,6 +18,7 @@ const App = () => {
   }, [settings]);
   return <BrowserRouter basename={BASE_URL}>
       <PathnameProvider>
+        <Toast/>
         <AppRouting />
       </PathnameProvider>
     </BrowserRouter>;

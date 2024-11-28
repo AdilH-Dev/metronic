@@ -1,0 +1,330 @@
+import React, { forwardRef, useEffect, useState } from 'react';
+import { Modal, ModalContent, ModalBody, ModalHeader, ModalTitle } from '@/components/modal';
+import { KeenIcon } from '@/components';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import clsx from 'clsx';
+import { ImageInput } from '@/components/image-input';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+const BACKEND_API_URL = import.meta.env.VITE_APP_BACKEND_API_URL;
+const BACKEND_IMAGE_URL = import.meta.env.VITE_APP_BACKEND_IMAGE_URL;
+
+const ModalPartner = forwardRef(({ open, onClose, id = null,callApi }, ref) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [logo, setLogo] = useState([]);
+
+  console.log(logo, 'popopopo');
+
+  const togglePassword = (event) => {
+    event.preventDefault();
+    setShowPassword(!showPassword);
+  };
+
+  // Validation schema
+  const loginSchema = Yup.object().shape({
+    name: Yup.string().required('Name is required'),
+    email: Yup.string()
+      .email('Wrong email format')
+      .min(3, 'Minimum 3 symbols')
+      .max(50, 'Maximum 50 symbols')
+      .required('Email is required'),
+    address: Yup.string().required('Address is required'),
+    password: Yup.string()
+      .matches(/^\d{4}$/, 'Pass code must be exactly 4 digits') // Exactly 4 digits allowed
+      .required('Pass code is required'),
+    logo: Yup.mixed().required('Logo is required')
+  });
+
+  const initialValues = {
+    name: '',
+    email: '',
+    address: '',
+    password: '',
+    logo: null
+  };
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema: loginSchema,
+    onSubmit: async (values) => {
+      setLoading(true);
+      const formData = new FormData();
+      if (values?.logo?.file != null) {
+        formData.append('logo', values?.logo?.file); // Assuming `logo` is the file
+      }
+      formData.append('name', values?.name);
+      formData.append('email', values?.email);
+      formData.append('address', values?.address);
+      formData.append('pin', values?.password);
+      if (id) {
+        formData.append('id', id);
+      }
+
+      try {
+        let response;
+        if (id) {
+          response = await axios.post(`${BACKEND_API_URL}extension-users/update/${id}`, formData);
+        } else {
+          response = await axios.post(`${BACKEND_API_URL}extension-users/add`, formData);
+        }
+        if (response?.data?.success === true) {
+          toast.success(response?.data?.message);
+          onClose();
+          console.log('Form submitted', response?.data);
+          formik.resetForm();
+          setLogo([]);
+          callApi();
+        }
+        // Example: Replace with your login logic
+      } catch (error) {
+        toast.error(error?.response?.data?.message);
+        console.log('error', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  });
+
+  const getEditPartnerData = async (passId) => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`${BACKEND_API_URL}extension-users/edit_data/${passId}`);
+      if (response?.data?.success === true) {
+        const data = response?.data?.data;
+        const logoURL = data?.logo ? `${BACKEND_IMAGE_URL}${data?.logo}` : null;
+        const logoValue = logoURL ? [{ dataURL: logoURL, file: null }] : []; // Ensure correct format
+
+        // Update formik values
+        formik.setValues({
+          name: data?.name || '',
+          email: data?.email || '',
+          address: data?.address || '',
+          password: data?.pin || '', // Map `pin` to `password`
+          logo: logoValue.length > 0 ? logoValue[0] : null // Set formik value
+        });
+
+        // Update logo state
+        setLogo(logoValue);
+
+        toast.success(response?.data?.message);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message || 'Failed to fetch edit data');
+      console.error('Error fetching edit data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (id) {
+      getEditPartnerData(id);
+    }
+  }, [id]);
+
+  return (
+    <Modal
+      open={open}
+      onClose={() => {
+        onClose();
+        formik.resetForm();
+        setLogo([]);
+      }}
+      ref={ref}
+    >
+      <ModalContent className="max-w-[600px] top-[10%]">
+        <ModalHeader>
+          <ModalTitle>Partners</ModalTitle>
+          <button
+            className="btn btn-sm btn-icon btn-light btn-clear shrink-0"
+            onClick={() => {
+              onClose();
+              formik.resetForm();
+              setLogo([]);
+            }}
+          >
+            <KeenIcon icon="cross" />
+          </button>
+        </ModalHeader>
+        <ModalBody className="grid gap-5 px-0">
+          <form className="card-body flex flex-col gap-5 py-0" onSubmit={formik.handleSubmit}>
+            {/* Logo Field */}
+            <div className="flex flex-col gap-1">
+              <label className="form-label text-gray-900 flex items-center gap-3">
+                Logo
+                {formik.touched.logo && formik.errors.logo && (
+                  <span role="alert" className="text-danger text-xs">
+                    {formik.errors.logo}
+                  </span>
+                )}
+              </label>
+              <ImageInput
+                value={logo}
+                onChange={(selectedLogo) => {
+                  setLogo(selectedLogo);
+                  formik.setFieldValue('logo', selectedLogo.length > 0 ? selectedLogo[0] : null);
+                }}
+              >
+                {({ onImageUpload }) => (
+                  <div
+                    className="flex items-center gap-4 border-[#464852] border rounded-[0.375rem] py-[4px] px-[12px] cursor-pointer bg-[#1f212a]"
+                    onClick={onImageUpload}
+                  >
+                    {logo.length > 0 ? (
+                      <img src={logo[0].dataURL} alt="logo" className="w-[30px] h-[30px]  border" />
+                    ) : (
+                      <div className="w-[30px] h-[30px]  border flex items-center justify-center text-gray-500">
+                        <KeenIcon icon="user" />
+                      </div>
+                    )}
+                    <span className="text-[#787a88] text-[13px] font-medium">
+                      {logo.length > 0 ? 'Change Logo' : 'Upload Logo'}
+                    </span>
+                    <button
+                      type="button"
+                      className="ml-auto btn btn-sm btn-light"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setLogo([]);
+                        formik.setFieldValue('logo', null);
+                      }}
+                    >
+                      Remove
+                    </button>
+                  </div>
+                )}
+              </ImageInput>
+            </div>
+
+            {/* Name Field */}
+            <div className="flex flex-col gap-1">
+              <label className="form-label text-gray-900 flex items-center gap-3">
+                Partner
+                {formik.touched.name && formik.errors.name && (
+                  <span role="alert" className="text-danger text-xs">
+                    {formik.errors.name}
+                  </span>
+                )}
+              </label>
+              <label className="input">
+                <input
+                  placeholder="Enter partner name"
+                  autoComplete="off"
+                  {...formik.getFieldProps('name')}
+                  className={clsx('form-control', {
+                    'is-invalid': formik.touched.name && formik.errors.name
+                  })}
+                />
+              </label>
+            </div>
+
+            {/* Email Field */}
+            <div className="flex flex-col gap-1">
+              <label className="form-label text-gray-900 flex items-center gap-3">
+                Email
+                {formik.touched.email && formik.errors.email && (
+                  <span role="alert" className="text-danger text-xs">
+                    {formik.errors.email}
+                  </span>
+                )}
+              </label>
+              <label className="input">
+                <input
+                  placeholder="Enter email"
+                  autoComplete="off"
+                  {...formik.getFieldProps('email')}
+                  className={clsx('form-control', {
+                    'is-invalid': formik.touched.email && formik.errors.email
+                  })}
+                />
+              </label>
+            </div>
+
+            {/* Address Field */}
+            <div className="flex flex-col gap-1">
+              <label className="form-label text-gray-900 flex items-center gap-3">
+                Address
+                {formik.touched.address && formik.errors.address && (
+                  <span role="alert" className="text-danger text-xs">
+                    {formik.errors.address}
+                  </span>
+                )}
+              </label>
+              <label className="input">
+                <input
+                  placeholder="Enter address"
+                  autoComplete="off"
+                  {...formik.getFieldProps('address')}
+                  className={clsx('form-control', {
+                    'is-invalid': formik.touched.address && formik.errors.address
+                  })}
+                />
+              </label>
+            </div>
+
+            {/* Password Field */}
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center justify-between gap-1">
+                <label className="form-label text-gray-900 flex items-center gap-3">
+                  Pass Code
+                  {formik.touched.password && formik.errors.password && (
+                    <span role="alert" className="text-danger text-xs">
+                      {formik.errors.password}
+                    </span>
+                  )}
+                </label>
+              </div>
+              <label className="input">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Enter Password"
+                  autoComplete="off"
+                  {...formik.getFieldProps('password')}
+                  className={clsx('form-control', {
+                    'is-invalid': formik.touched.password && formik.errors.password
+                  })}
+                />
+                <button className="btn btn-icon" onClick={togglePassword}>
+                  <KeenIcon
+                    icon="eye"
+                    className={clsx('text-gray-500', { hidden: showPassword })}
+                  />
+                  <KeenIcon
+                    icon="eye-slash"
+                    className={clsx('text-gray-500', { hidden: !showPassword })}
+                  />
+                </button>
+              </label>
+            </div>
+
+            {/* Footer Buttons */}
+            <div className="flex items-center gap-2.5 justify-end px-5">
+              <button
+                onClick={() => {
+                  onClose();
+                  formik.resetForm();
+                  setLogo([]);
+                }}
+                className="btn btn-sm btn-light w-[70px]"
+                data-modal-dismiss="true"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="btn btn-sm btn-primary"
+                disabled={loading || formik.isSubmitting}
+              >
+                {loading ? 'Please wait...' : 'Save'}
+              </button>
+            </div>
+          </form>
+        </ModalBody>
+      </ModalContent>
+    </Modal>
+  );
+});
+
+export { ModalPartner };
