@@ -24,7 +24,8 @@ const DataGridInner = () => {
           </DataGridTable>
           {loading && <DataGridLoader />} {/* Show loader if loading */}
         </div>
-        <DataGridToolbar />
+        <div></div>
+        {/* <DataGridToolbar /> */}
       </div>
     </Fragment>;
 };

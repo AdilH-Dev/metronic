@@ -1,37 +1,27 @@
 import { Fragment, useRef, useState } from 'react';
 import { Container } from '@/components/container';
-import { Toolbar, ToolbarActions, ToolbarDescription, ToolbarHeading, ToolbarPageTitle } from '@/partials/toolbar';
+// import { Toolbar, ToolbarActions, ToolbarDescription, ToolbarHeading, ToolbarPageTitle } from '@/partials/toolbar';
 import { PageNavbar } from '@/pages/account';
 import { AccountTeamsContent } from '.';
-import { useLayout } from '@/providers';
-import { ModalPartner } from '../../../../partials/modals/partners';
+// import { useLayout } from '@/providers';
 // import { ModalShareProfile } from '../modals/share-profile';
 
 const AccountTeamsPage = () => {
-  const {
-    currentLayout
-  } = useLayout();
-  const itemRef = useRef(null);
+  // const {
+  //   currentLayout
+  // } = useLayout();
 
-  const [ShareProfileModalOpen, setShareProfileModalOpen] = useState(false);
-  const handleSettingsModalOpen = () => {
-    setShareProfileModalOpen(true);
-    itemRef.current?.hide();
-  };
-  const handleShareProfileModalClose = () => {
-    setShareProfileModalOpen(false);
-  };
 
   return <Fragment>
       <PageNavbar />
 
-      {currentLayout?.name === 'demo1-layout' && <Container>
+      {/* {currentLayout?.name === 'demo1-layout' && <Container>
           <Toolbar>
             <ToolbarHeading>
               <ToolbarPageTitle />
-              {/* <ToolbarDescription>
+              <ToolbarDescription>
                 Efficient team organization with real-time updates
-              </ToolbarDescription> */}
+              </ToolbarDescription>
             </ToolbarHeading>
             <ToolbarActions>
               <a href="#" className="btn btn-sm btn-light" onClick={handleSettingsModalOpen}>
@@ -39,13 +29,11 @@ const AccountTeamsPage = () => {
               </a>
             </ToolbarActions>
           </Toolbar>
-        </Container>}
+        </Container>} */}
 
       <Container>
         <AccountTeamsContent />
       </Container>
-
-      <ModalPartner open={ShareProfileModalOpen} onClose={handleShareProfileModalClose} />
     </Fragment>;
 };
 export { AccountTeamsPage };
