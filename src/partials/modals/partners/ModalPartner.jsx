@@ -33,10 +33,10 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
       .required('Email is required'),
     address: Yup.string().required('Address is required'),
     password: Yup.string()
-      .matches(/^\d{4}$/, 'Pass code must be exactly 4 digits') // Exactly 4 digits allowed
-      .required('Pass code is required'),
+      .matches(/^\d{4}$/, 'Key must be exactly 4 digits') // Exactly 4 digits allowed
+      .required('Key is required'),
     logo: Yup.mixed().required('Logo is required'),
-    contact: Yup.string().required('Contact is required'),
+    contact: Yup.string().required('Contact Name is required'),
     phoneNo: Yup.string()
       .matches(/^\d+(\s\d+)*$/, 'Phone no contain only numbers')
       .required('Phone number is required')
@@ -314,7 +314,7 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
                 {/* the contact */}
                 <div className="flex flex-col gap-1">
                   <label className="form-label text-gray-900 flex items-center gap-3">
-                    Contact
+                    Contact Name
                     {formik.touched.contact && formik.errors.contact && (
                       <span role="alert" className="text-danger text-xs">
                         {formik.errors.contact}
@@ -360,7 +360,7 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
                 <div className="flex flex-col gap-1">
                   <div className="flex items-center justify-between gap-1">
                     <label className="form-label text-gray-900 flex items-center gap-3">
-                      Pass Code
+                      Key
                       {formik.touched.password && formik.errors.password && (
                         <span role="alert" className="text-danger text-xs">
                           {formik.errors.password}
