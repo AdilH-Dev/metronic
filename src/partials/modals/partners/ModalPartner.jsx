@@ -33,7 +33,7 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
       .required('Email is required'),
     address: Yup.string().required('Address is required'),
     password: Yup.string()
-      .matches(/^\d{4}$/, 'Key must be exactly 4 digits') // Exactly 4 digits allowed
+      .matches(/^\d{4}$|^\d{8}$/, 'Key must be exactly 4 or 8 digits') // Allow either 4 or 8 digits
       .required('Key is required'),
     logo: Yup.mixed().required('Logo is required'),
     contact: Yup.string().required('Contact Name is required'),
@@ -64,7 +64,7 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
       formData.append('name', values?.name);
       formData.append('email', values?.email);
       formData.append('address', values?.address);
-      formData.append('pin', values?.password);
+      formData.append('key', values?.password);
       formData.append('contact', values?.contact);
       formData.append('phoneNo', values?.phoneNo);
       if (id) {
@@ -110,7 +110,7 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
           name: data?.name || '',
           email: data?.email || '',
           address: data?.address || '',
-          password: data?.pin || '', // Map `pin` to `password`
+          password: +data?.key || '', // Map `pin` to `password`
           contact: data?.contact || '',
           phoneNo: data?.phoneNo || '',
           logo: logoValue.length > 0 ? logoValue[0] : null // Set formik value
@@ -133,7 +133,29 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
     if (id) {
       getEditPartnerData(id);
     }
-  }, [id]);
+    if (!id && open) {
+      getKeyGenator();
+    }
+  }, [id, open]);
+
+  const getKeyGenator = async () => {
+    setEditLoading(true);
+    try {
+      const response = await axios.get(`${BACKEND_API_URL}extension-users/generate-key`);
+      if (response?.data?.success === true) {
+        const data = response?.data?.data;
+        // Update formik values
+        formik.setValues({
+          password: data || '' // Map `pin` to `password`
+        });
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+      console.error('Error fetching edit data:', error);
+    } finally {
+      setEditLoading(false);
+    }
+  };
 
   console.log(formik.errors, 'formik.errorsformik.errors');
 
@@ -242,6 +264,10 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
                     </div>
                   )}
                 </ImageInput>
+              <div>
+              <span className="text-[#787a88] text-[13px]">Size: 47x47 px</span>
+              <span className="text-[#787a88] text-[13px] ms-4">Types: JPG, JPEG, PNG</span>
+              </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -371,7 +397,7 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
                   <label className="input">
                     <input
                       type={showPassword ? 'text' : 'password'}
-                      placeholder="Enter Password"
+                      placeholder="Enter key"
                       autoComplete="off"
                       {...formik.getFieldProps('password')}
                       className={clsx('form-control', {

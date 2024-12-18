@@ -29,7 +29,7 @@ const Teams = () => {
       {
         accessorFn: (row) => row?.name,
         id: 'name',
-        header: () => 'Partner',
+        header: () => 'Name',
         enableSorting: false,
         cell: (info) => {
           return (
@@ -60,8 +60,8 @@ const Teams = () => {
         }
       },
       {
-        accessorFn: (row) => row.contact,
-        id: 'contact',
+        accessorFn: (row) => row.business_name,
+        id: 'business_name',
         enableSorting: false,
         header: () => '',
         cell: (info) => info.getValue(),
@@ -81,49 +81,25 @@ const Teams = () => {
           cellClassName: 'text-gray-700 font-normal'
         }
       },
-      {
-        accessorFn: (row) => row.logo,
-        id: 'members',
-        header: () => 'Logo',
-        enableSorting: false,
-        cell: (info) => (
-          <div>
-            {/* <img src="/media/app/default-logo-dark.svg" alt="" /> */}
-            {info?.row?.original?.logo && (
-              <img
-                className="h-[30px] w-[30px]"
-                src={`${BACKEND_IMAGE_URL}${info?.row?.original?.logo}`}
-                alt=""
-              />
-            )}
-          </div>
-        ),
-
-        // <CommonAvatars size="size-[30px]" group={info.row.original.members.group} more={info.row.original.members.more} />,
-        meta: {
-          className: 'w-[200px]',
-          cellClassName: 'text-gray-700 font-normal'
-        }
-      },
-      {
-        id: 'edit',
-        header: () => '',
-        enableSorting: false,
-        cell: ({ row }) => (
-          <button
-            className="btn btn-sm btn-icon btn-clear btn-light"
-            onClick={() => {
-              handleSettingsModalOpen();
-              setSelectedId(row?.original?.id);
-            }}
-          >
-            <KeenIcon icon="notepad-edit" />
-          </button>
-        ),
-        meta: {
-          className: 'w-[60px]'
-        }
-      }
+      // {
+      //   id: 'edit',
+      //   header: () => '',
+      //   enableSorting: false,
+      //   cell: ({ row }) => (
+      //     <button
+      //       className="btn btn-sm btn-icon btn-clear btn-light"
+      //       onClick={() => {
+      //         handleSettingsModalOpen();
+      //         setSelectedId(row?.original?.id);
+      //       }}
+      //     >
+      //       <KeenIcon icon="notepad-edit" />
+      //     </button>
+      //   ),
+      //   meta: {
+      //     className: 'w-[60px]'
+      //   }
+      // }
       // {
       //   id: 'delete',
       //   header: () => '',
@@ -179,7 +155,7 @@ const Teams = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        `${BACKEND_API_URL}extension-users?pageNumber=${currentPage}&perPage=${pageSize}&user_type=partner&search_data=${searchTerm}`
+        `${BACKEND_API_URL}extension-users?pageNumber=${currentPage}&perPage=${pageSize}&user_type=accountant&search_data=${searchTerm}`
       );
       if (response?.data?.success === true) {
         // toast.success(response?.data?.message);
@@ -225,11 +201,11 @@ const Teams = () => {
                 Efficient team organization with real-time updates
               </ToolbarDescription> */}
             </ToolbarHeading>
-            <ToolbarActions>
+            {/* <ToolbarActions>
               <a href="#" className="btn btn-sm btn-light" onClick={handleSettingsModalOpen}>
-                Add Partner
+                Add Partnerssss
               </a>
-            </ToolbarActions>
+            </ToolbarActions> */}
           </Toolbar>
         </Container>
       )}
@@ -242,7 +218,7 @@ const Teams = () => {
         />
 
         <div className="card-header flex-wrap py-5">
-          <h3 className="card-title">Partners</h3>
+          <h3 className="card-title">Customers</h3>
           <div className="flex gap-6">
             <div className="relative">
               <KeenIcon
@@ -251,7 +227,7 @@ const Teams = () => {
               />
               <input
                 type="text"
-                placeholder="Search Partners"
+                placeholder="Search Customers"
                 className="input input-sm pl-8"
                 value={searchTerm}
                 onChange={(e) => {

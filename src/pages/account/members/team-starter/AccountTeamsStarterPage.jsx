@@ -11,7 +11,7 @@ const AccountTeamsStarterPage = () => {
   return <Fragment>
       <PageNavbar />
 
-      {currentLayout?.name === 'demo1-layout' && <Container>
+      {/* {currentLayout?.name === 'demo1-layout' && <Container>
           <Toolbar>
             <ToolbarHeading>
               <ToolbarPageTitle />
@@ -25,7 +25,7 @@ const AccountTeamsStarterPage = () => {
               </a>
             </ToolbarActions>
           </Toolbar>
-        </Container>}
+        </Container>} */}
 
       <Container>
         <AccountTeamsStarterContent />
