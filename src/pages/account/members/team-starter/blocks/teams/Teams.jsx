@@ -155,7 +155,7 @@ const Teams = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        `${BACKEND_API_URL}extension-users?pageNumber=${currentPage}&perPage=${pageSize}&user_type=accountant&search_data=${searchTerm}`
+        `${BACKEND_API_URL}extension-users?pageNumber=${currentPage}&perPage=${pageSize}&user_type=customer&search_data=${searchTerm}`
       );
       if (response?.data?.success === true) {
         // toast.success(response?.data?.message);
