@@ -130,3 +130,11 @@
 .demo1.layout-initialized .header {
 	transition: left var(--tw-sidebar-transition-duration) var(--tw-sidebar-transition-timing);
 }
+
+.react-international-phone-country-selector-button{
+	border: none !important ;
+	background-color: transparent !important ;
+  }
+  .react-international-phone-country-selector-button:hover {
+	background-color: transparent !important ;
+  }

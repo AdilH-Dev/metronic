@@ -17,7 +17,7 @@ const HeaderLogo = () => {
   return <div className="flex gap-1 items-center">
     {/* remove lg:hidden on above div */}
       <Link to="/" className="shrink-0">
-        <img src={toAbsoluteUrl('/media/app/default-logo-dark.svg')} className="h-[25px]" alt="mini-logo" />
+        <img src={toAbsoluteUrl('/media/app/Senda-line-logo-w.png')} className="h-[25px]" alt="mini-logo" />
       {/* change mini logo to default logo dark */}
       </Link>
 

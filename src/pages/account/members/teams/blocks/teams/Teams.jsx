@@ -27,15 +27,15 @@ const Teams = () => {
   // const storageFilterId = 'teams-filter';
   const columns = [
       {
-        accessorFn: (row) => row?.name,
-        id: 'name',
+        accessorFn: (row) => row?.company_name,
+        id: 'company_name',
         header: () => 'Partner',
         enableSorting: false,
         cell: (info) => {
           return (
             <div className="flex flex-col gap-2">
               <span className="leading-none font-medium text-sm text-gray-900">
-                {info?.row?.original?.name}
+                {info?.row?.original?.company_name}
               </span>
               {/* <span className="text-2sm text-gray-700 font-normal leading-3">
                 {info.row.original.team.description}
@@ -63,7 +63,7 @@ const Teams = () => {
         accessorFn: (row) => row.contact,
         id: 'contact',
         enableSorting: false,
-        header: () => '',
+        header: () => 'Contact Name',
         cell: (info) => info.getValue(),
         meta: {
           className: 'w-[200px]',
@@ -74,7 +74,7 @@ const Teams = () => {
         accessorFn: (row) => row.phoneNo,
         id: 'phoneNo',
         enableSorting: false,
-        header: () => '',
+        header: () => 'Phone No',
         cell: (info) => info.getValue(),
         meta: {
           className: 'w-[200px]',
@@ -100,6 +100,17 @@ const Teams = () => {
         ),
 
         // <CommonAvatars size="size-[30px]" group={info.row.original.members.group} more={info.row.original.members.more} />,
+        meta: {
+          className: 'w-[200px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
+        accessorFn: (row) => row.company_number,
+        id: 'company_number',
+        enableSorting: false,
+        header: () => 'Company No',
+        cell: (info) => info.getValue(),
         meta: {
           className: 'w-[200px]',
           cellClassName: 'text-gray-700 font-normal'

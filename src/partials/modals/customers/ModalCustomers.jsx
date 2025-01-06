@@ -7,6 +7,7 @@ import clsx from 'clsx';
 import { ImageInput } from '@/components/image-input';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import {parse, format } from 'date-fns';
 const BACKEND_API_URL = import.meta.env.VITE_APP_BACKEND_API_URL;
 const BACKEND_IMAGE_URL = import.meta.env.VITE_APP_BACKEND_IMAGE_URL;
 
@@ -24,7 +25,7 @@ const isPhoneValid = (phone) => {
   }
 };
 
-const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => {
+const ModalCustomers = forwardRef(({ open, onClose, id = null, callApi }, ref) => {
   const [showPassword, setShowPassword] = useState(true);
   const [loading, setLoading] = useState(false);
   const [editLoading, setEditLoading] = useState(false);
@@ -37,38 +38,34 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
 
   // Validation schema
   const loginSchema = Yup.object().shape({
-    company_name: Yup.string().required('Partner name is required'),
+    company_name: Yup.string().required('required'),
+    company_no: Yup.string()
+      .matches(/^\d{8}$/, 'Must be 8 digits') // Allow only 8 digits
+      .required('Company no is required'),
+    contact: Yup.string().required('Contact Name is required'),
     email: Yup.string()
       .email('Wrong email format')
       .min(3, 'Minimum 3 symbols')
       .max(50, 'Maximum 50 symbols')
       .required('Email is required'),
     address: Yup.string().required('Address is required'),
-    password: Yup.string()
-      .matches(/^\d{4}$/, 'Must be 4 digits') // Allow only 4 digits
-      .required('Key is required'),
-    company_no: Yup.string()
-      .matches(/^\d{8}$/, 'Must be 8 digits') // Allow only 8 digits
-      .required('Company no is required'),
-    logo: Yup.mixed().required('Logo is required'),
-    contact: Yup.string().required('Contact Name is required'),
-    // phoneNo: Yup.string()
-    //   .matches(/^\d+(\s\d+)*$/, 'Phone no contain only numbers')
-    //   .required('Phone number is required')
     phoneNo: Yup.string()
       .required('Phone number is required')
-      .test('is-valid-phone', 'Invalid phone number', (value) => isPhoneValid(value))
+      .test('is-valid-phone', 'Invalid phone number', (value) => isPhoneValid(value)),
+    status: Yup.string().required('Status is required'),
+    package_expiry_date: Yup.string().required('Expires is required')
   });
 
   const initialValues = {
     company_name: '',
+    company_no: '',
+    contact: '',
     email: '',
     address: '',
-    password: '',
-    contact: '',
     phoneNo: '',
-    logo: null,
-    company_no: ''
+    accountant_purchasing_plan_id: '',
+    package_expiry_date: '',
+    status: '1'
   };
 
   const formik = useFormik({
@@ -77,17 +74,19 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
     onSubmit: async (values) => {
       setLoading(true);
       const formData = new FormData();
-      if (values?.logo?.file != null) {
-        formData.append('logo', values?.logo?.file); // Assuming `logo` is the file
-      }
       formData.append('company_name', values?.company_name);
+      formData.append('company_no', values?.company_no);
+      formData.append('contact', values?.contact);
       formData.append('email', values?.email);
       formData.append('address', values?.address);
-      formData.append('key', values?.password);
-      formData.append('contact', values?.contact);
       formData.append('phoneNo', values?.phoneNo);
-      formData.append('company_no', values?.company_no);
-      formData.append('user_type', 'partner');
+      formData.append(
+        'accountant_purchasing_plan_id',
+        values?.accountant_purchasing_plan_id === '' ? null : values?.accountant_purchasing_plan_id
+      );
+      formData.append('package_expiry_date', format(values?.package_expiry_date, 'dd-MM-yyyy'));
+      formData.append('status', values?.status);
+      formData.append('user_type', 'customer');
       if (id) {
         formData.append('id', id);
       }
@@ -104,7 +103,6 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
           onClose();
           console.log('Form submitted', response?.data);
           formik.resetForm();
-          setLogo([]);
           callApi();
         }
         // Example: Replace with your login logic
@@ -116,29 +114,31 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
       }
     }
   });
-  console.log(formik.errors.company_name,"formik valuesss")
+
   const getEditPartnerData = async (passId) => {
     setEditLoading(true);
     try {
       const response = await axios.get(`${BACKEND_API_URL}extension-users/edit_data/${passId}`);
       if (response?.data?.success === true) {
         const data = response?.data?.data;
-        const logoURL = data?.logo ? `${BACKEND_IMAGE_URL}${data?.logo}` : null;
-        const logoValue = logoURL ? [{ dataURL: logoURL, file: null }] : []; // Ensure correct format
-
+        console.log(data?.package_expiry_date);
+        let date;
+        if (data?.package_expiry_date) {
+          date = parse(data?.package_expiry_date, 'dd-MM-yyyy', new Date());
+        } else {
+          date = ""
+        }
         formik.setValues({
           company_name: data?.company_name || '',
+          company_no: data?.company_number || '',
+          contact: data?.contact || '',
           email: data?.email || '',
           address: data?.address || '',
-          password: +data?.key || '', // Map `pin` to `password`
-          contact: data?.contact || '',
           phoneNo: data?.phoneNo || '',
-          company_no: data?.company_number || '',
-          logo: logoValue.length > 0 ? logoValue[0] : null // Set formik value
+          status: data?.status === '1' ? '1' : '0' || '',
+          accountant_purchasing_plan_id: data?.accountant_purchasing_plan_id || '',
+          package_expiry_date: date? format(date, 'yyyy-MM-dd'):""
         });
-
-        // Update logo state
-        setLogo(logoValue);
 
         // toast.success(response?.data?.message);
       }
@@ -154,36 +154,10 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
     if (id) {
       getEditPartnerData(id);
     }
-    if (!id && open) {
-      getKeyGenator();
-    }
-  }, [id, open]);
+  }, [id]);
 
-  const getKeyGenator = async () => {
-    setEditLoading(true);
-    try {
-      const response = await axios.get(`${BACKEND_API_URL}extension-users/generate-key`);
-      if (response?.data?.success === true) {
-        const data = response?.data?.data;
-        // Update formik values
-        formik.setValues({
-          company_name: '',
-          company_no: '',
-          email: '',
-          address: '',
-          contact: '',
-          phoneNo: '',
-          logo: null, // Set formik value
-          password: data || '' // Map `pin` to `password`
-        });
-      }
-    } catch (error) {
-      toast.error(error?.response?.data?.message);
-      console.error('Error fetching edit data:', error);
-    } finally {
-      setEditLoading(false);
-    }
-  };
+  // console.log(formik.errors,"errorooroor")
+  console.log(formik.values, 'valuesssss');
 
   return (
     <Modal
@@ -191,19 +165,17 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
       onClose={() => {
         onClose();
         formik.resetForm();
-        setLogo([]);
       }}
       ref={ref}
     >
       <ModalContent className="max-w-[600px] top-[15%]">
         <ModalHeader>
-          <ModalTitle>Partners</ModalTitle>
+          <ModalTitle>Customers</ModalTitle>
           <button
             className="btn btn-sm btn-icon btn-light btn-clear shrink-0"
             onClick={() => {
               onClose();
               formik.resetForm();
-              setLogo([]);
             }}
           >
             <KeenIcon icon="cross" />
@@ -242,7 +214,7 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
             <form className="card-body flex flex-col gap-5 py-0" onSubmit={formik.handleSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Logo Field */}
-                <div className="flex flex-col gap-1">
+                {/* <div className="flex flex-col gap-1">
                   <label className="form-label text-gray-900 flex items-center gap-3">
                     Logo
                     {formik.touched.logo && formik.errors.logo && (
@@ -298,8 +270,30 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
                     <span className="text-[#787a88] text-[13px]">Size: 47x47 px</span>
                     <span className="text-[#787a88] text-[13px] ms-4">Types: JPG, JPEG, PNG</span>
                   </div>
+                </div> */}
+
+                {/* Business Name Field */}
+                <div className="flex flex-col gap-1">
+                  <label className="form-label text-gray-900 flex items-center gap-3">
+                    Business Name
+                    {formik.touched.company_name && formik.errors.company_name && (
+                      <span role="alert" className="text-danger text-xs">
+                        {formik.errors.company_name}
+                      </span>
+                    )}
+                  </label>
+                  <label className="input">
+                    <input
+                      placeholder="Enter Business name"
+                      autoComplete="off"
+                      {...formik.getFieldProps('company_name')}
+                      className={clsx('form-control', {
+                        'is-invalid': formik.touched.company_name && formik.errors.company_name
+                      })}
+                    />
+                  </label>
                 </div>
-                {/* Password Field */}
+                {/* Company No Field */}
                 <div className="flex flex-col gap-1">
                   <div className="flex items-center justify-between gap-1">
                     <label className="form-label text-gray-900 flex items-center gap-3">
@@ -337,23 +331,24 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
                     {/* <span className="text-[#787a88] text-[13px] ms-4">Types: JPG, JPEG, PNG</span> */}
                   </div>
                 </div>
-                {/* Name Field */}
+
+                {/* the contact */}
                 <div className="flex flex-col gap-1">
                   <label className="form-label text-gray-900 flex items-center gap-3">
-                    Partner
-                    {formik.touched.company_name && formik.errors.company_name && (
+                    Contact Name
+                    {formik.touched.contact && formik.errors.contact && (
                       <span role="alert" className="text-danger text-xs">
-                        {formik.errors.company_name}
+                        {formik.errors.contact}
                       </span>
                     )}
                   </label>
                   <label className="input">
                     <input
-                      placeholder="Enter partner name"
+                      placeholder="Enter contact"
                       autoComplete="off"
-                      {...formik.getFieldProps('company_name')}
+                      {...formik.getFieldProps('contact')}
                       className={clsx('form-control', {
-                        'is-invalid': formik.touched.company_name && formik.errors.company_name
+                        'is-invalid': formik.touched.contact && formik.errors.contact
                       })}
                     />
                   </label>
@@ -403,28 +398,6 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
                   </label>
                 </div>
 
-                {/* the contact */}
-                <div className="flex flex-col gap-1">
-                  <label className="form-label text-gray-900 flex items-center gap-3">
-                    Contact Name
-                    {formik.touched.contact && formik.errors.contact && (
-                      <span role="alert" className="text-danger text-xs">
-                        {formik.errors.contact}
-                      </span>
-                    )}
-                  </label>
-                  <label className="input">
-                    <input
-                      placeholder="Enter contact"
-                      autoComplete="off"
-                      {...formik.getFieldProps('contact')}
-                      className={clsx('form-control', {
-                        'is-invalid': formik.touched.contact && formik.errors.contact
-                      })}
-                    />
-                  </label>
-                </div>
-
                 {/* phone number */}
 
                 <div className="flex flex-col gap-1">
@@ -468,29 +441,58 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
                   </label>
                 </div>
 
-                {/* Password Field */}
+                {/* Package Type Field */}
+                <div className="flex flex-col gap-1">
+                  <label className="form-label text-gray-900 flex items-center gap-3">
+                    Package Type
+                    {formik.touched.accountant_purchasing_plan_id &&
+                      formik.errors.accountant_purchasing_plan_id && (
+                        <span role="alert" className="text-danger text-xs">
+                          {formik.errors.accountant_purchasing_plan_id}
+                        </span>
+                      )}
+                  </label>
+                  <label className="input p-0 border-none">
+                    <select
+                      className={clsx('form-control select', {
+                        'is-invalid':
+                          formik.touched.accountant_purchasing_plan_id &&
+                          formik.errors.accountant_purchasing_plan_id
+                      })}
+                      {...formik.getFieldProps('accountant_purchasing_plan_id')}
+                    >
+                      <option value="">Select Package Type</option>
+                      <option value="1">Start Pack</option>
+                      <option value="2">Pro Pack</option>
+                    </select>
+                  </label>
+                </div>
+
+                {/* key Field */}
                 <div className="flex flex-col gap-1">
                   <div className="flex items-center justify-between gap-1">
                     <label className="form-label text-gray-900 flex items-center gap-3">
-                      Key
-                      {formik.touched.password && formik.errors.password && (
+                      Expires
+                      {formik.touched.package_expiry_date && formik.errors.package_expiry_date && (
                         <span role="alert" className="text-danger text-xs">
-                          {formik.errors.password}
+                          {formik.errors.package_expiry_date}
                         </span>
                       )}
                     </label>
                   </div>
                   <label className="input">
                     <input
-                      type={showPassword ? 'text' : 'password'}
-                      placeholder="Enter key"
+                      // type={showPassword ? 'text' : 'password'}
+                      type="date"
+                      placeholder=""
                       autoComplete="off"
-                      {...formik.getFieldProps('password')}
+                      {...formik.getFieldProps('package_expiry_date')}
                       className={clsx('form-control', {
-                        'is-invalid': formik.touched.password && formik.errors.password
+                        'is-invalid':
+                          formik.touched.package_expiry_date && formik.errors.package_expiry_date
                       })}
                     />
-                    <button className="btn btn-icon" onClick={togglePassword}>
+                    {/* <button className="btn btn-icon" onClick={togglePassword}>
                       <KeenIcon
                         icon="eye"
                         className={clsx('text-gray-500', { hidden: showPassword })}
@@ -499,31 +501,55 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
                         icon="eye-slash"
                         className={clsx('text-gray-500', { hidden: !showPassword })}
                       />
-                    </button>
+                    </button> */}
                   </label>
                 </div>
               </div>
 
               {/* Footer Buttons */}
-              <div className="flex items-center gap-2.5 justify-end py-2">
-                <button
-                  onClick={() => {
-                    onClose();
-                    formik.resetForm();
-                    setLogo([]);
-                  }}
-                  className="btn btn-sm btn-light w-20 flex justify-center items-center"
-                  data-modal-dismiss="true"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="btn btn-sm btn-primary w-20 flex justify-center items-center"
-                  disabled={loading || formik.isSubmitting}
-                >
-                  {loading ? 'Please wait...' : 'Save'}
-                </button>
+              <div className="flex items-center  justify-between py-2">
+                <div className="flex items-center gap-2">
+                  <label className="switch switch-sm">
+                    <span className="switch-label">Status</span>
+                    <input
+                      type="checkbox"
+                      value="1"
+                      name="status"
+                      checked={formik.values.status === '1'} // Check if the value is 1
+                      onChange={(e) => formik.setFieldValue('status', e.target.checked ? '1' : '0')}
+                      // readOnly
+                      // {...formik.getFieldProps('status')}
+                      className={clsx('form-control', {
+                        'is-invalid': formik.touched.status && formik.errors.status
+                      })}
+                    />
+                    {formik.touched.status && formik.errors.status && (
+                      <span role="alert" className="text-danger text-xs">
+                        {formik.errors.status}
+                      </span>
+                    )}
+                  </label>
+                </div>
+                <div className="flex items-center justify-end gap-2.5">
+                  <button
+                    onClick={() => {
+                      onClose();
+                      formik.resetForm();
+                      setLogo([]);
+                    }}
+                    className="btn btn-sm btn-light w-20 flex justify-center items-center"
+                    data-modal-dismiss="true"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="btn btn-sm btn-primary w-20 flex justify-center items-center"
+                    disabled={loading || formik.isSubmitting}
+                  >
+                    {loading ? 'Please wait...' : 'Save'}
+                  </button>
+                </div>
               </div>
             </form>
           )}
@@ -533,4 +559,4 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
   );
 });
 
-export { ModalPartner };
+export { ModalCustomers };
