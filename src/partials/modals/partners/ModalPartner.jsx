@@ -51,7 +51,7 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
       .matches(/^\d{8}$/, 'Must be 8 digits') // Allow only 8 digits
       .required('Company no is required'),
     logo: Yup.mixed().required('Logo is required'),
-    contact: Yup.string().required('Contact Name is required'),
+    name: Yup.string().required('Contact Name is required'),
     // phoneNo: Yup.string()
     //   .matches(/^\d+(\s\d+)*$/, 'Phone no contain only numbers')
     //   .required('Phone number is required')
@@ -65,7 +65,7 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
     email: '',
     address: '',
     password: '',
-    contact: '',
+    name: '',
     phoneNo: '',
     logo: null,
     company_no: ''
@@ -84,7 +84,7 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
       formData.append('email', values?.email);
       formData.append('address', values?.address);
       formData.append('key', values?.password);
-      formData.append('contact', values?.contact);
+      formData.append('name', values?.name);
       formData.append('phoneNo', values?.phoneNo);
       formData.append('company_no', values?.company_no);
       formData.append('user_type', 'partner');
@@ -116,7 +116,7 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
       }
     }
   });
-  console.log(formik.errors.company_name,"formik valuesss")
+  console.log(formik.errors.company_name, 'formik valuesss');
   const getEditPartnerData = async (passId) => {
     setEditLoading(true);
     try {
@@ -131,7 +131,7 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
           email: data?.email || '',
           address: data?.address || '',
           password: +data?.key || '', // Map `pin` to `password`
-          contact: data?.contact || '',
+          name: data?.name || '',
           phoneNo: data?.phoneNo || '',
           company_no: data?.company_number || '',
           logo: logoValue.length > 0 ? logoValue[0] : null // Set formik value
@@ -171,7 +171,7 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
           company_no: '',
           email: '',
           address: '',
-          contact: '',
+          name: '',
           phoneNo: '',
           logo: null, // Set formik value
           password: data || '' // Map `pin` to `password`
@@ -240,103 +240,62 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
             </div>
           ) : (
             <form className="card-body flex flex-col gap-5 py-0" onSubmit={formik.handleSubmit}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Logo Field */}
-                <div className="flex flex-col gap-1">
-                  <label className="form-label text-gray-900 flex items-center gap-3">
-                    Logo
-                    {formik.touched.logo && formik.errors.logo && (
-                      <span role="alert" className="text-danger text-xs">
-                        {formik.errors.logo}
-                      </span>
-                    )}
-                  </label>
-                  <ImageInput
-                    value={logo}
-                    onChange={(selectedLogo) => {
-                      setLogo(selectedLogo);
-                      formik.setFieldValue(
-                        'logo',
-                        selectedLogo.length > 0 ? selectedLogo[0] : null
-                      );
-                    }}
-                  >
-                    {({ onImageUpload }) => (
-                      <div
-                        className="flex items-center gap-4 border-[#464852] border rounded-[0.375rem] h-[39px] px-[12px] cursor-pointer bg-[#1f212a]"
-                        onClick={onImageUpload}
-                      >
-                        {logo.length > 0 ? (
-                          <img
-                            src={logo[0].dataURL}
-                            alt="logo"
-                            className="w-[30px] h-[30px]  border"
-                          />
-                        ) : (
-                          <div className="w-[30px] h-[30px]  border flex items-center justify-center text-gray-500">
-                            <KeenIcon icon="user" />
-                          </div>
-                        )}
-                        <span className="text-[#787a88] text-[13px] font-medium">
-                          {logo.length > 0 ? 'Change Logo' : 'Upload Logo'}
-                        </span>
-                        <button
-                          type="button"
-                          className="ml-auto btn btn-sm btn-light"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setLogo([]);
-                            formik.setFieldValue('logo', null);
-                          }}
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    )}
-                  </ImageInput>
-                  <div>
-                    <span className="text-[#787a88] text-[13px]">Size: 47x47 px</span>
-                    <span className="text-[#787a88] text-[13px] ms-4">Types: JPG, JPEG, PNG</span>
-                  </div>
-                </div>
-                {/* Password Field */}
-                <div className="flex flex-col gap-1">
-                  <div className="flex items-center justify-between gap-1">
-                    <label className="form-label text-gray-900 flex items-center gap-3">
-                      Company No
-                      {formik.touched.company_no && formik.errors.company_no && (
-                        <span role="alert" className="text-danger text-xs">
-                          {formik.errors.company_no}
-                        </span>
+              {/* Logo Field */}
+              <div className="flex flex-col gap-1">
+                <label className="form-label text-gray-900 flex items-center gap-3">
+                  Logo
+                  {formik.touched.logo && formik.errors.logo && (
+                    <span role="alert" className="text-danger text-xs">
+                      {formik.errors.logo}
+                    </span>
+                  )}
+                </label>
+                <ImageInput
+                  value={logo}
+                  onChange={(selectedLogo) => {
+                    setLogo(selectedLogo);
+                    formik.setFieldValue('logo', selectedLogo.length > 0 ? selectedLogo[0] : null);
+                  }}
+                >
+                  {({ onImageUpload }) => (
+                    <div
+                      className="flex items-center gap-4 border-[#464852] border rounded-[0.375rem] h-[39px] px-[12px] cursor-pointer bg-[#1f212a]"
+                      onClick={onImageUpload}
+                    >
+                      {logo.length > 0 ? (
+                        <img
+                          src={logo[0].dataURL}
+                          alt="logo"
+                          className="w-[30px] h-[30px]  border"
+                        />
+                      ) : (
+                        <div className="w-[30px] h-[30px]  border flex items-center justify-center text-gray-500">
+                          <KeenIcon icon="user" />
+                        </div>
                       )}
-                    </label>
-                  </div>
-                  <label className="input">
-                    <input
-                      type={'tel'}
-                      placeholder="Enter company no"
-                      autoComplete="off"
-                      {...formik.getFieldProps('company_no')}
-                      className={clsx('form-control', {
-                        'is-invalid': formik.touched.company_no && formik.errors.company_no
-                      })}
-                    />
-                    {/* <button className="btn btn-icon" onClick={togglePassword}>
-                      <KeenIcon
-                        icon="eye"
-                        className={clsx('text-gray-500', { hidden: showPassword })}
-                      />
-                      <KeenIcon
-                        icon="eye-slash"
-                        className={clsx('text-gray-500', { hidden: !showPassword })}
-                      />
-                    </button> */}
-                  </label>
-                  <div>
-                    <span className="text-[#787a88] text-[13px]">Enter 8 digit company number</span>
-                    {/* <span className="text-[#787a88] text-[13px] ms-4">Types: JPG, JPEG, PNG</span> */}
-                  </div>
+                      <span className="text-[#787a88] text-[13px] font-medium">
+                        {logo.length > 0 ? 'Change Logo' : 'Upload Logo'}
+                      </span>
+                      <button
+                        type="button"
+                        className="ml-auto btn btn-sm btn-light"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setLogo([]);
+                          formik.setFieldValue('logo', null);
+                        }}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  )}
+                </ImageInput>
+                <div>
+                  <span className="text-[#787a88] text-[13px]">Size: 47x47 px</span>
+                  <span className="text-[#787a88] text-[13px] ms-4">Types: JPG, JPEG, PNG</span>
                 </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Name Field */}
                 <div className="flex flex-col gap-1">
                   <label className="form-label text-gray-900 flex items-center gap-3">
@@ -407,19 +366,19 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
                 <div className="flex flex-col gap-1">
                   <label className="form-label text-gray-900 flex items-center gap-3">
                     Contact Name
-                    {formik.touched.contact && formik.errors.contact && (
+                    {formik.touched.name && formik.errors.name && (
                       <span role="alert" className="text-danger text-xs">
-                        {formik.errors.contact}
+                        {formik.errors.name}
                       </span>
                     )}
                   </label>
                   <label className="input">
                     <input
-                      placeholder="Enter contact"
+                      placeholder="Enter contact name"
                       autoComplete="off"
-                      {...formik.getFieldProps('contact')}
+                      {...formik.getFieldProps('name')}
                       className={clsx('form-control', {
-                        'is-invalid': formik.touched.contact && formik.errors.contact
+                        'is-invalid': formik.touched.name && formik.errors.name
                       })}
                     />
                   </label>
@@ -502,28 +461,57 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
                     </button>
                   </label>
                 </div>
-              </div>
+                {/* company no Field */}
+                <div className="flex flex-col gap-1 pb-2">
+                  <div className="flex items-center justify-between gap-1">
+                    <label className="form-label text-gray-900 flex items-center gap-3">
+                      Company No
+                      {formik.touched.company_no && formik.errors.company_no && (
+                        <span role="alert" className="text-danger text-xs">
+                          {formik.errors.company_no}
+                        </span>
+                      )}
+                    </label>
+                  </div>
+                  <label className="input">
+                    <input
+                      type={'tel'}
+                      placeholder="Enter 8 digit company no"
+                      autoComplete="off"
+                      {...formik.getFieldProps('company_no')}
+                      className={clsx('form-control', {
+                        'is-invalid': formik.touched.company_no && formik.errors.company_no
+                      })}
+                    />
+                  </label>
+                  {/* <div>
+                    <span className="text-[#787a88] text-[13px]">Enter 8 digit company number</span>
+                  </div> */}
+                </div>
 
-              {/* Footer Buttons */}
-              <div className="flex items-center gap-2.5 justify-end py-2">
-                <button
-                  onClick={() => {
-                    onClose();
-                    formik.resetForm();
-                    setLogo([]);
-                  }}
-                  className="btn btn-sm btn-light w-20 flex justify-center items-center"
-                  data-modal-dismiss="true"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="btn btn-sm btn-primary w-20 flex justify-center items-center"
-                  disabled={loading || formik.isSubmitting}
-                >
-                  {loading ? 'Please wait...' : 'Save'}
-                </button>
+                <div className="flex flex-col gap-1 justify-end pb-2">
+                  {/* Footer Buttons */}
+                  <div className="flex items-center gap-2.5 justify-end">
+                      <button
+                        onClick={() => {
+                          onClose();
+                          formik.resetForm();
+                          setLogo([]);
+                        }}
+                        className="btn btn-sm btn-light w-20 flex justify-center items-center"
+                        data-modal-dismiss="true"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        className="btn btn-sm btn-primary w-20 flex justify-center items-center"
+                        disabled={loading || formik.isSubmitting}
+                      >
+                        {loading ? 'Please wait...' : 'Save'}
+                      </button>
+                  </div>
+                </div>
               </div>
             </form>
           )}

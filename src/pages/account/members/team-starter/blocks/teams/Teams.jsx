@@ -111,8 +111,8 @@ const Teams = () => {
       }
     },
     {
-      accessorFn: (row) => row.contact,
-      id: 'contact',
+      accessorFn: (row) => row.name,
+      id: 'name',
       enableSorting: false,
       header: () => 'Contact Name',
       cell: (info) => info.getValue(),

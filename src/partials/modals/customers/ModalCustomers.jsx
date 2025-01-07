@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import { ImageInput } from '@/components/image-input';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import {parse, format } from 'date-fns';
+import { parse, format } from 'date-fns';
 const BACKEND_API_URL = import.meta.env.VITE_APP_BACKEND_API_URL;
 const BACKEND_IMAGE_URL = import.meta.env.VITE_APP_BACKEND_IMAGE_URL;
 
@@ -42,7 +42,7 @@ const ModalCustomers = forwardRef(({ open, onClose, id = null, callApi }, ref) =
     company_no: Yup.string()
       .matches(/^\d{8}$/, 'Must be 8 digits') // Allow only 8 digits
       .required('Company no is required'),
-    contact: Yup.string().required('Contact Name is required'),
+    name: Yup.string().required('Contact Name is required'),
     email: Yup.string()
       .email('Wrong email format')
       .min(3, 'Minimum 3 symbols')
@@ -59,7 +59,7 @@ const ModalCustomers = forwardRef(({ open, onClose, id = null, callApi }, ref) =
   const initialValues = {
     company_name: '',
     company_no: '',
-    contact: '',
+    name: '',
     email: '',
     address: '',
     phoneNo: '',
@@ -76,7 +76,7 @@ const ModalCustomers = forwardRef(({ open, onClose, id = null, callApi }, ref) =
       const formData = new FormData();
       formData.append('company_name', values?.company_name);
       formData.append('company_no', values?.company_no);
-      formData.append('contact', values?.contact);
+      formData.append('name', values?.name);
       formData.append('email', values?.email);
       formData.append('address', values?.address);
       formData.append('phoneNo', values?.phoneNo);
@@ -126,18 +126,18 @@ const ModalCustomers = forwardRef(({ open, onClose, id = null, callApi }, ref) =
         if (data?.package_expiry_date) {
           date = parse(data?.package_expiry_date, 'dd-MM-yyyy', new Date());
         } else {
-          date = ""
+          date = '';
         }
         formik.setValues({
           company_name: data?.company_name || '',
           company_no: data?.company_number || '',
-          contact: data?.contact || '',
+          name: data?.name || '',
           email: data?.email || '',
           address: data?.address || '',
           phoneNo: data?.phoneNo || '',
           status: data?.status === '1' ? '1' : '0' || '',
           accountant_purchasing_plan_id: data?.accountant_purchasing_plan_id || '',
-          package_expiry_date: date? format(date, 'yyyy-MM-dd'):""
+          package_expiry_date: date ? format(date, 'yyyy-MM-dd') : ''
         });
 
         // toast.success(response?.data?.message);
@@ -336,19 +336,19 @@ const ModalCustomers = forwardRef(({ open, onClose, id = null, callApi }, ref) =
                 <div className="flex flex-col gap-1">
                   <label className="form-label text-gray-900 flex items-center gap-3">
                     Contact Name
-                    {formik.touched.contact && formik.errors.contact && (
+                    {formik.touched.name && formik.errors.name && (
                       <span role="alert" className="text-danger text-xs">
-                        {formik.errors.contact}
+                        {formik.errors.name}
                       </span>
                     )}
                   </label>
                   <label className="input">
                     <input
-                      placeholder="Enter contact"
+                      placeholder="Enter contact name"
                       autoComplete="off"
-                      {...formik.getFieldProps('contact')}
+                      {...formik.getFieldProps('name')}
                       className={clsx('form-control', {
-                        'is-invalid': formik.touched.contact && formik.errors.contact
+                        'is-invalid': formik.touched.name && formik.errors.name
                       })}
                     />
                   </label>
