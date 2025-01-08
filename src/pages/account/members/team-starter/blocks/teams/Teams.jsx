@@ -45,7 +45,7 @@ const Teams = () => {
         );
       },
       meta: {
-        className: 'min-w-[150px]',
+        className: 'min-w-[190px]',
         cellClassName: 'text-gray-700 font-normal'
       }
     },
