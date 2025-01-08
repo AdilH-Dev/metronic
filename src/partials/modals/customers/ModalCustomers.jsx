@@ -53,7 +53,7 @@ const ModalCustomers = forwardRef(({ open, onClose, id = null, callApi }, ref) =
       .required('Phone number is required')
       .test('is-valid-phone', 'Invalid phone number', (value) => isPhoneValid(value)),
     status: Yup.string().required('Status is required'),
-    package_expiry_date: Yup.string().required('Expires is required')
+    // package_expiry_date: Yup.string().required('Expires is required')
   });
 
   const initialValues = {
@@ -84,7 +84,9 @@ const ModalCustomers = forwardRef(({ open, onClose, id = null, callApi }, ref) =
         'accountant_purchasing_plan_id',
         values?.accountant_purchasing_plan_id === '' ? null : values?.accountant_purchasing_plan_id
       );
-      formData.append('package_expiry_date', format(values?.package_expiry_date, 'dd-MM-yyyy'));
+      if(values?.package_expiry_date){
+        formData.append('package_expiry_date', format(values?.package_expiry_date, 'dd-MM-yyyy'));
+      }
       formData.append('status', values?.status);
       formData.append('user_type', 'customer');
       if (id) {
@@ -510,7 +512,7 @@ const ModalCustomers = forwardRef(({ open, onClose, id = null, callApi }, ref) =
               <div className="flex items-center  justify-between py-2">
                 <div className="flex items-center gap-2">
                   <label className="switch switch-sm">
-                    <span className="switch-label">Status</span>
+                    <span className="switch-label">Active status</span>
                     <input
                       type="checkbox"
                       value="1"

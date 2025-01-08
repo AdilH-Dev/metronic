@@ -45,7 +45,7 @@ const Teams = () => {
         );
       },
       meta: {
-        className: 'w-[150px]',
+        className: 'min-w-[150px]',
         cellClassName: 'text-gray-700 font-normal'
       }
     },
@@ -67,7 +67,7 @@ const Teams = () => {
       header: () => 'Address',
       cell: (info) => info.getValue(),
       meta: {
-        className: 'w-[350px]',
+        className: 'min-w-[300px]',
         cellClassName: 'text-gray-700 font-normal'
       }
     },
@@ -79,7 +79,7 @@ const Teams = () => {
       cell: (info) =>
         info.getValue() === '1' ? 'Start Pack' : info.getValue() === '2' ? 'Pro Pack' : '',
       meta: {
-        className: 'w-[200px]',
+        className: 'min-w-[120px]',
         cellClassName: 'text-gray-700 font-normal'
       }
     },
@@ -117,7 +117,7 @@ const Teams = () => {
       header: () => 'Contact Name',
       cell: (info) => info.getValue(),
       meta: {
-        className: 'w-[200px]',
+        className: 'min-w-[110px]',
         cellClassName: 'text-gray-700 font-normal'
       }
     },
