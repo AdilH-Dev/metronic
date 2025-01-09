@@ -161,6 +161,12 @@ const ModalCustomers = forwardRef(({ open, onClose, id = null, callApi }, ref) =
   // console.log(formik.errors,"errorooroor")
   console.log(formik.values, 'valuesssss');
 
+  const handleSmsIconClick = (event) => {
+    // Prevent default behavior and stop event propagation
+    event.preventDefault();
+    event.stopPropagation();
+  };
+
   return (
     <Modal
       open={open}
@@ -375,6 +381,12 @@ const ModalCustomers = forwardRef(({ open, onClose, id = null, callApi }, ref) =
                         'is-invalid': formik.touched.email && formik.errors.email
                       })}
                     />
+                     <img
+                     onClick={handleSmsIconClick}
+                      className="h-[20px] w-[20px] cursor-pointer"
+                      src="/media/brand-logos/emailIcon.png"
+                      alt=""
+                    />
                   </label>
                 </div>
 
@@ -411,15 +423,7 @@ const ModalCustomers = forwardRef(({ open, onClose, id = null, callApi }, ref) =
                       </span>
                     )}
                   </label>
-                  <label className="input">
-                    {/* <input
-                      placeholder="Enter phoneNo"
-                      autoComplete="off"
-                      {...formik.getFieldProps('phoneNo')}
-                      className={clsx('form-control', {
-                        'is-invalid': formik.touched.phoneNo && formik.errors.phoneNo
-                      })}
-                    /> */}
+                  <label className="input relative pr-0">
                     <PhoneInput
                       value={formik.values.phoneNo}
                       onChange={(value) => formik.setFieldValue('phoneNo', value)}
@@ -439,6 +443,12 @@ const ModalCustomers = forwardRef(({ open, onClose, id = null, callApi }, ref) =
                         border: 'none', // Removes additional borders
                         outline: 'none' // Removes focus outline
                       }}
+                    />
+                     <img
+                     onClick={handleSmsIconClick}
+                      className="h-[20px] w-[20px] absolute right-[12px] cursor-pointer"
+                      src="/media/brand-logos/smsIcon.png"
+                      alt=""
                     />
                   </label>
                 </div>
