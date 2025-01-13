@@ -254,6 +254,11 @@ const Teams = () => {
     setPageSize(size);
     setCurrentPage(1); // Reset to the first page to avoid invalid page numbers
   };
+
+  const handleRowClick = (rowData) => {
+    handleSettingsModalOpen();
+    setSelectedId(rowData);
+  };
   return (
     <Fragment>
       {currentLayout?.name === 'demo1-layout' && (
@@ -318,6 +323,7 @@ const Teams = () => {
               serverSide={true}
               rowSelect={true}
               pagination={false}
+              onRowClick={handleRowClick}
               // search ={false}
               // pagination={{
               //   size: pageSize,

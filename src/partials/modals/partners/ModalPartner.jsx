@@ -185,6 +185,12 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
     }
   };
 
+  const handleSmsIconClick = (event) => {
+    // Prevent default behavior and stop event propagation
+    event.preventDefault();
+    event.stopPropagation();
+  };
+
   return (
     <Modal
       open={open}
@@ -337,6 +343,12 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
                         'is-invalid': formik.touched.email && formik.errors.email
                       })}
                     />
+                                         <img
+                     onClick={handleSmsIconClick}
+                      className="h-[20px] w-[20px] cursor-pointer"
+                      src="/media/brand-logos/emailIcon.png"
+                      alt=""
+                    />
                   </label>
                 </div>
 
@@ -395,7 +407,7 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
                       </span>
                     )}
                   </label>
-                  <label className="input">
+                  <label className="input relative pr-0">
                     {/* <input
                       placeholder="Enter phoneNo"
                       autoComplete="off"
@@ -423,6 +435,12 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
                         border: 'none', // Removes additional borders
                         outline: 'none' // Removes focus outline
                       }}
+                    />
+                    <img
+                     onClick={handleSmsIconClick}
+                      className="h-[20px] w-[20px] absolute right-[12px] cursor-pointer"
+                      src="/media/brand-logos/smsIcon.png"
+                      alt=""
                     />
                   </label>
                 </div>

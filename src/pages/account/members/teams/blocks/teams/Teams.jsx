@@ -28,158 +28,169 @@ const Teams = () => {
   const { currentLayout } = useLayout();
   // const storageFilterId = 'teams-filter';
   const columns = [
-      {
-        accessorFn: (row) => row?.company_name,
-        id: 'company_name',
-        header: () => 'Business Name',
-        enableSorting: false,
-        cell: (info) => {
-          return (
-            <div className="flex flex-col gap-2 cursor-pointer"
+    {
+      accessorFn: (row) => row?.company_name,
+      id: 'company_name',
+      header: () => 'Business Name',
+      enableSorting: false,
+      cell: (info) => {
+        return (
+          <div
+            className="flex flex-col gap-2 cursor-pointer"
             onClick={() => {
               handleSettingsModalOpen();
               setSelectedId(info?.row?.original?.id);
             }}
-            >
-              <span className="leading-none font-medium text-sm text-gray-900">
-                {info?.row?.original?.company_name}
-              </span>
-              {/* <span className="text-2sm text-gray-700 font-normal leading-3">
+          >
+            <span className="leading-none font-medium text-sm text-gray-900">
+              {info?.row?.original?.company_name}
+            </span>
+            {/* <span className="text-2sm text-gray-700 font-normal leading-3">
                 {info.row.original.team.description}
               </span> */}
-            </div>
-          );
-        },
-        meta: {
-          className: 'min-w-[190px]',
-          cellClassName: 'text-gray-700 font-normal'
-        }
-      },
-      {
-        accessorFn: (row) => row.company_number,
-        id: 'company_number',
-        enableSorting: false,
-        header: () => 'Company No',
-        cell: (info) => info.getValue(),
-        meta: {
-          className: 'min-w-[120px]',
-          cellClassName: 'text-gray-700 font-normal'
-        }
-      },
-      {
-        accessorFn: (row) => row.address,
-        id: 'address',
-        enableSorting: false,
-        header: () => 'Address',
-        cell: (info) => info.getValue(),
-        meta: {
-          className: 'min-w-[300px]',
-          cellClassName: 'text-gray-700 font-normal'
-        }
-      },
-      {
-        accessorFn: (row) => row.logo,
-        id: 'members',
-        header: () => 'Logo',
-        enableSorting: false,
-        cell: (info) => (
-          <div>
-            {/* <img src="/media/app/default-logo-dark.svg" alt="" /> */}
-            {info?.row?.original?.logo && (
-              <img
-                className="h-[30px] w-[30px]"
-                src={`${BACKEND_IMAGE_URL}${info?.row?.original?.logo}`}
-                alt=""
-              />
-            )}
           </div>
-        ),
+        );
+      },
+      meta: {
+        className: 'min-w-[190px]',
+        cellClassName: 'text-gray-700 font-normal'
+      }
+    },
+    {
+      accessorFn: (row) => row.company_number,
+      id: 'company_number',
+      enableSorting: false,
+      header: () => 'Company No',
+      cell: (info) => (
+        <div
+          className="cursor-pointer"
+          onClick={() => {
+            handleSettingsModalOpen();
+            setSelectedId(info?.row?.original?.id);
+          }}
+        >
+          {info.getValue()}
+        </div>
+      ),
+      meta: {
+        className: 'min-w-[120px]',
+        cellClassName: 'text-gray-700 font-normal'
+      }
+    },
+    {
+      accessorFn: (row) => row.address,
+      id: 'address',
+      enableSorting: false,
+      header: () => 'Address',
+      cell: (info) => info.getValue(),
+      meta: {
+        className: 'min-w-[300px]',
+        cellClassName: 'text-gray-700 font-normal'
+      }
+    },
+    {
+      accessorFn: (row) => row.logo,
+      id: 'members',
+      header: () => 'Logo',
+      enableSorting: false,
+      cell: (info) => (
+        <div>
+          {/* <img src="/media/app/default-logo-dark.svg" alt="" /> */}
+          {info?.row?.original?.logo && (
+            <img
+              className="h-[30px] w-[30px]"
+              src={`${BACKEND_IMAGE_URL}${info?.row?.original?.logo}`}
+              alt=""
+            />
+          )}
+        </div>
+      ),
 
-        // <CommonAvatars size="size-[30px]" group={info.row.original.members.group} more={info.row.original.members.more} />,
-        meta: {
-          className: 'min-w-[100px]',
-          cellClassName: 'text-gray-700 font-normal'
-        }
-      },
-      {
-        accessorFn: (row) => row.created_at,
-        id: 'created_at',
-        enableSorting: false,
-        header: () => 'Joined',
-         cell: info => formatIsoDate(info.row.original.updated_at),
-        meta: {
-          className: 'min-w-[120px]',
-          cellClassName: 'text-gray-700 font-normal'
-        }
-      },
-      {
-        accessorFn: (row) => row.name,
-        id: 'name',
-        enableSorting: false,
-        header: () => 'Contact Name',
-        cell: (info) => info.getValue(),
-        meta: {
-          className: 'min-w-[150px]',
-          cellClassName: 'text-gray-700 font-normal'
-        }
-      },
-  
-      {
-        accessorFn: (row) => row.phoneNo,
-        id: 'phoneNo',
-        enableSorting: false,
-        header: () => 'Phone No',
-        cell: (info) => info.getValue(),
-        meta: {
-          className: 'min-w-[155px]',
-          cellClassName: 'text-gray-700 font-normal'
-        }
-      },
-      {
-        accessorFn: (row) => row.email,
-        id: 'email',
-        enableSorting: false,
-        header: () => 'Email',
-        cell: (info) => info.getValue(),
-        meta: {
-          className: 'w-[200px]',
-          cellClassName: 'text-gray-700 font-normal'
-        }
-      },
+      // <CommonAvatars size="size-[30px]" group={info.row.original.members.group} more={info.row.original.members.more} />,
+      meta: {
+        className: 'min-w-[100px]',
+        cellClassName: 'text-gray-700 font-normal'
+      }
+    },
+    {
+      accessorFn: (row) => row.created_at,
+      id: 'created_at',
+      enableSorting: false,
+      header: () => 'Joined',
+      cell: (info) => formatIsoDate(info.row.original.updated_at),
+      meta: {
+        className: 'min-w-[120px]',
+        cellClassName: 'text-gray-700 font-normal'
+      }
+    },
+    {
+      accessorFn: (row) => row.name,
+      id: 'name',
+      enableSorting: false,
+      header: () => 'Contact Name',
+      cell: (info) => info.getValue(),
+      meta: {
+        className: 'min-w-[150px]',
+        cellClassName: 'text-gray-700 font-normal'
+      }
+    },
 
-      // {
-      //   id: 'edit',
-      //   header: () => '',
-      //   enableSorting: false,
-      //   cell: ({ row }) => (
-      //     <button
-      //       className="btn btn-sm btn-icon btn-clear btn-light"
-      //       onClick={() => {
-      //         handleSettingsModalOpen();
-      //         setSelectedId(row?.original?.id);
-      //       }}
-      //     >
-      //       <KeenIcon icon="notepad-edit" />
-      //     </button>
-      //   ),
-      //   meta: {
-      //     className: 'w-[60px]'
-      //   }
-      // }
-      // {
-      //   id: 'delete',
-      //   header: () => '',
-      //   enableSorting: false,
-      //   cell: ({
-      //     row
-      //   }) => <button className="btn btn-sm btn-icon btn-clear btn-light" onClick={() => alert(`Clicked on delete for ${row.original.team}`)}>
-      //           <KeenIcon icon="trash" />
-      //         </button>,
-      //   meta: {
-      //     className: 'w-[60px]'
-      //   }
-      // }
-    ]
+    {
+      accessorFn: (row) => row.phoneNo,
+      id: 'phoneNo',
+      enableSorting: false,
+      header: () => 'Phone No',
+      cell: (info) => info.getValue(),
+      meta: {
+        className: 'min-w-[155px]',
+        cellClassName: 'text-gray-700 font-normal'
+      }
+    },
+    {
+      accessorFn: (row) => row.email,
+      id: 'email',
+      enableSorting: false,
+      header: () => 'Email',
+      cell: (info) => info.getValue(),
+      meta: {
+        className: 'w-[200px]',
+        cellClassName: 'text-gray-700 font-normal'
+      }
+    }
+
+    // {
+    //   id: 'edit',
+    //   header: () => '',
+    //   enableSorting: false,
+    //   cell: ({ row }) => (
+    //     <button
+    //       className="btn btn-sm btn-icon btn-clear btn-light"
+    //       onClick={() => {
+    //         handleSettingsModalOpen();
+    //         setSelectedId(row?.original?.id);
+    //       }}
+    //     >
+    //       <KeenIcon icon="notepad-edit" />
+    //     </button>
+    //   ),
+    //   meta: {
+    //     className: 'w-[60px]'
+    //   }
+    // }
+    // {
+    //   id: 'delete',
+    //   header: () => '',
+    //   enableSorting: false,
+    //   cell: ({
+    //     row
+    //   }) => <button className="btn btn-sm btn-icon btn-clear btn-light" onClick={() => alert(`Clicked on delete for ${row.original.team}`)}>
+    //           <KeenIcon icon="trash" />
+    //         </button>,
+    //   meta: {
+    //     className: 'w-[60px]'
+    //   }
+    // }
+  ];
   // Memoize the team data
   // const data = useMemo(() => TeamsData, []);
 
@@ -198,20 +209,17 @@ const Teams = () => {
   const [pageSize, setPageSize] = useState(10); // Default page size
   const [totalRecords, setTotalRecords] = useState(0);
 
-
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
       setCurrentPage(1);
-       // Update debounced value after delay
+      // Update debounced value after delay
     }, 700); // Adjust debounce delay (e.g., 300ms)
 
     return () => {
       clearTimeout(handler); // Clear timeout on component unmount or input change
     };
   }, [searchTerm]);
-
-
 
   useEffect(() => {
     getPartnerData();
@@ -239,7 +247,6 @@ const Teams = () => {
     }
   };
 
-
   const itemRef = useRef(null);
 
   const [ShareProfileModalOpen, setShareProfileModalOpen] = useState(false);
@@ -255,6 +262,11 @@ const Teams = () => {
     const size = Number(e.target.value);
     setPageSize(size);
     setCurrentPage(1); // Reset to the first page to avoid invalid page numbers
+  };
+
+  const handleRowClick = (rowData) => {
+    handleSettingsModalOpen();
+    setSelectedId(rowData);
   };
   return (
     <Fragment>
@@ -297,7 +309,7 @@ const Teams = () => {
                 className="input input-sm pl-8"
                 value={searchTerm}
                 onChange={(e) => {
-                  setSearchTerm(e.target.value)
+                  setSearchTerm(e.target.value);
                 }} // Update search term
               />
             </div>
@@ -320,6 +332,7 @@ const Teams = () => {
               serverSide={true}
               rowSelect={true}
               pagination={false}
+              onRowClick={handleRowClick}
               // search ={false}
               // pagination={{
               //   size: pageSize,
@@ -332,30 +345,32 @@ const Teams = () => {
               // ]}
             />
           )}
-          <div className='flex justify-between items-center' style={{borderTop:"1px solid #26272F"}}>
-
-          <div className="card-footer justify-center md:justify-between flex-col md:flex-row gap-3 text-gray-600 text-2sm font-medium">
-            <div className="flex items-center gap-2">
-              Show
-              <select
-                className="select select-sm w-16"
-                value={pageSize}
-                onChange={handlePageSizeChange}
-              >
-                {[5, 10, 25, 50, 100]?.map((size, index) => (
-                  <option key={index} value={size}>
-                    {size}
-                  </option>
-                ))}
-              </select>
-              Per Page
+          <div
+            className="flex justify-between items-center"
+            style={{ borderTop: '1px solid #26272F' }}
+          >
+            <div className="card-footer justify-center md:justify-between flex-col md:flex-row gap-3 text-gray-600 text-2sm font-medium">
+              <div className="flex items-center gap-2">
+                Show
+                <select
+                  className="select select-sm w-16"
+                  value={pageSize}
+                  onChange={handlePageSizeChange}
+                >
+                  {[5, 10, 25, 50, 100]?.map((size, index) => (
+                    <option key={index} value={size}>
+                      {size}
+                    </option>
+                  ))}
+                </select>
+                Per Page
+              </div>
             </div>
-          </div>
-          <CustomPagination
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            totalRecords={totalRecords}
-          />
+            <CustomPagination
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              totalRecords={totalRecords}
+            />
           </div>
         </div>
       </div>

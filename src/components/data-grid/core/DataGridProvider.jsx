@@ -182,6 +182,6 @@ export const DataGridProvider = props => {
     isSelectAllChecked,
     isSelectAllIndeterminate
   }}>
-      <DataGridInner />
+      <DataGridInner onRowClick={props.onRowClick} />
     </DataGridContext.Provider>;
 };
