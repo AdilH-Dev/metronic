@@ -19,6 +19,8 @@ import { ContentLoader } from '../../../../../../components/loaders/ContentLoade
 import { ModalPartner } from '../../../../../../partials/modals/partners';
 import { useLayout } from '@/providers';
 import CustomPagination from '../../../../../../components/data-grid/components/CustomPagination';
+import { formatIsoDate } from '@/utils/Date';
+
 const BACKEND_API_URL = import.meta.env.VITE_APP_BACKEND_API_URL;
 const BACKEND_IMAGE_URL = import.meta.env.VITE_APP_BACKEND_IMAGE_URL;
 
@@ -29,11 +31,16 @@ const Teams = () => {
       {
         accessorFn: (row) => row?.company_name,
         id: 'company_name',
-        header: () => 'Partner',
+        header: () => 'Business Name',
         enableSorting: false,
         cell: (info) => {
           return (
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 cursor-pointer"
+            onClick={() => {
+              handleSettingsModalOpen();
+              setSelectedId(info?.row?.original?.id);
+            }}
+            >
               <span className="leading-none font-medium text-sm text-gray-900">
                 {info?.row?.original?.company_name}
               </span>
@@ -49,35 +56,24 @@ const Teams = () => {
         }
       },
       {
+        accessorFn: (row) => row.company_number,
+        id: 'company_number',
+        enableSorting: false,
+        header: () => 'Company No',
+        cell: (info) => info.getValue(),
+        meta: {
+          className: 'min-w-[120px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
         accessorFn: (row) => row.address,
         id: 'address',
         enableSorting: false,
         header: () => 'Address',
         cell: (info) => info.getValue(),
         meta: {
-          className: 'w-[350px]',
-          cellClassName: 'text-gray-700 font-normal'
-        }
-      },
-      {
-        accessorFn: (row) => row.name,
-        id: 'name',
-        enableSorting: false,
-        header: () => 'Contact Name',
-        cell: (info) => info.getValue(),
-        meta: {
-          className: 'w-[200px]',
-          cellClassName: 'text-gray-700 font-normal'
-        }
-      },
-      {
-        accessorFn: (row) => row.phoneNo,
-        id: 'phoneNo',
-        enableSorting: false,
-        header: () => 'Phone No',
-        cell: (info) => info.getValue(),
-        meta: {
-          className: 'w-[200px]',
+          className: 'min-w-[300px]',
           cellClassName: 'text-gray-700 font-normal'
         }
       },
@@ -101,40 +97,75 @@ const Teams = () => {
 
         // <CommonAvatars size="size-[30px]" group={info.row.original.members.group} more={info.row.original.members.more} />,
         meta: {
-          className: 'w-[200px]',
+          className: 'min-w-[100px]',
           cellClassName: 'text-gray-700 font-normal'
         }
       },
       {
-        accessorFn: (row) => row.company_number,
-        id: 'company_number',
+        accessorFn: (row) => row.created_at,
+        id: 'created_at',
         enableSorting: false,
-        header: () => 'Company No',
+        header: () => 'Joined',
+         cell: info => formatIsoDate(info.row.original.updated_at),
+        meta: {
+          className: 'min-w-[120px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
+        accessorFn: (row) => row.name,
+        id: 'name',
+        enableSorting: false,
+        header: () => 'Contact Name',
+        cell: (info) => info.getValue(),
+        meta: {
+          className: 'min-w-[150px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+  
+      {
+        accessorFn: (row) => row.phoneNo,
+        id: 'phoneNo',
+        enableSorting: false,
+        header: () => 'Phone No',
+        cell: (info) => info.getValue(),
+        meta: {
+          className: 'min-w-[155px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
+        accessorFn: (row) => row.email,
+        id: 'email',
+        enableSorting: false,
+        header: () => 'Email',
         cell: (info) => info.getValue(),
         meta: {
           className: 'w-[200px]',
           cellClassName: 'text-gray-700 font-normal'
         }
       },
-      {
-        id: 'edit',
-        header: () => '',
-        enableSorting: false,
-        cell: ({ row }) => (
-          <button
-            className="btn btn-sm btn-icon btn-clear btn-light"
-            onClick={() => {
-              handleSettingsModalOpen();
-              setSelectedId(row?.original?.id);
-            }}
-          >
-            <KeenIcon icon="notepad-edit" />
-          </button>
-        ),
-        meta: {
-          className: 'w-[60px]'
-        }
-      }
+
+      // {
+      //   id: 'edit',
+      //   header: () => '',
+      //   enableSorting: false,
+      //   cell: ({ row }) => (
+      //     <button
+      //       className="btn btn-sm btn-icon btn-clear btn-light"
+      //       onClick={() => {
+      //         handleSettingsModalOpen();
+      //         setSelectedId(row?.original?.id);
+      //       }}
+      //     >
+      //       <KeenIcon icon="notepad-edit" />
+      //     </button>
+      //   ),
+      //   meta: {
+      //     className: 'w-[60px]'
+      //   }
+      // }
       // {
       //   id: 'delete',
       //   header: () => '',

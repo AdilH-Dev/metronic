@@ -34,7 +34,12 @@ const Teams = () => {
       enableSorting: false,
       cell: (info) => {
         return (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 cursor-pointer"
+          onClick={() => {
+            handleSettingsModalOpen();
+            setSelectedId(info?.row?.original?.id);
+          }}
+          >
             <span className="leading-none font-medium text-sm text-gray-900">
               {info?.row?.original?.company_name}
             </span>
@@ -56,7 +61,7 @@ const Teams = () => {
       header: () => 'Company No',
       cell: (info) => info.getValue(),
       meta: {
-        className: 'w-[200px]',
+        className: 'min-w-[120px]',
         cellClassName: 'text-gray-700 font-normal'
       }
     },
@@ -117,7 +122,7 @@ const Teams = () => {
       header: () => 'Contact Name',
       cell: (info) => info.getValue(),
       meta: {
-        className: 'min-w-[110px]',
+        className: 'min-w-[150px]',
         cellClassName: 'text-gray-700 font-normal'
       }
     },
@@ -144,25 +149,25 @@ const Teams = () => {
         cellClassName: 'text-gray-700 font-normal'
       }
     },
-    {
-      id: 'edit',
-      header: () => '',
-      enableSorting: false,
-      cell: ({ row }) => (
-        <button
-          className="btn btn-sm btn-icon btn-clear btn-light"
-          onClick={() => {
-            handleSettingsModalOpen();
-            setSelectedId(row?.original?.id);
-          }}
-        >
-          <KeenIcon icon="notepad-edit" />
-        </button>
-      ),
-      meta: {
-        className: 'w-[60px]'
-      }
-    }
+    // {
+    //   id: 'edit',
+    //   header: () => '',
+    //   enableSorting: false,
+    //   cell: ({ row }) => (
+    //     <button
+    //       className="btn btn-sm btn-icon btn-clear btn-light"
+    //       onClick={() => {
+    //         handleSettingsModalOpen();
+    //         setSelectedId(row?.original?.id);
+    //       }}
+    //     >
+    //       <KeenIcon icon="notepad-edit" />
+    //     </button>
+    //   ),
+    //   meta: {
+    //     className: 'w-[60px]'
+    //   }
+    // }
     // {
     //   id: 'delete',
     //   header: () => '',

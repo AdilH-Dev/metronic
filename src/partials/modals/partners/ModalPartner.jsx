@@ -299,7 +299,7 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
                 {/* Name Field */}
                 <div className="flex flex-col gap-1">
                   <label className="form-label text-gray-900 flex items-center gap-3">
-                    Partner
+                    Business Name
                     {formik.touched.company_name && formik.errors.company_name && (
                       <span role="alert" className="text-danger text-xs">
                         {formik.errors.company_name}
@@ -492,24 +492,24 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
                 <div className="flex flex-col gap-1 justify-end pb-2">
                   {/* Footer Buttons */}
                   <div className="flex items-center gap-2.5 justify-end">
-                      <button
-                        onClick={() => {
-                          onClose();
-                          formik.resetForm();
-                          setLogo([]);
-                        }}
-                        className="btn btn-sm btn-light w-20 flex justify-center items-center"
-                        data-modal-dismiss="true"
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        type="submit"
-                        className="btn btn-sm btn-primary w-20 flex justify-center items-center"
-                        disabled={loading || formik.isSubmitting}
-                      >
-                        {loading ? 'Please wait...' : 'Save'}
-                      </button>
+                    <button
+                      onClick={() => {
+                        onClose();
+                        formik.resetForm();
+                        setLogo([]);
+                      }}
+                      className="btn btn-sm btn-light w-20 flex justify-center items-center"
+                      data-modal-dismiss="true"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="btn btn-sm btn-primary w-20 flex justify-center items-center"
+                      disabled={loading || formik.isSubmitting}
+                    >
+                      {loading ? 'Please wait...' : 'Save'}
+                    </button>
                   </div>
                 </div>
               </div>
