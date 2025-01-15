@@ -63,11 +63,6 @@ const Teams = () => {
       header: () => 'Company No',
       cell: (info) => (
         <div
-          className="cursor-pointer"
-          onClick={() => {
-            handleSettingsModalOpen();
-            setSelectedId(info?.row?.original?.id);
-          }}
         >
           {info.getValue()}
         </div>
@@ -265,8 +260,8 @@ const Teams = () => {
   };
 
   const handleRowClick = (rowData) => {
-    handleSettingsModalOpen();
-    setSelectedId(rowData);
+    // handleSettingsModalOpen();
+    // setSelectedId(rowData);
   };
   return (
     <Fragment>

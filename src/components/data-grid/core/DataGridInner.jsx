@@ -15,7 +15,7 @@ const DataGridInner = ({ onRowClick }) => {
               {table.getHeaderGroups().map(headerGroup => headerGroup.headers.map((header, index) => <DataGridTableHeadCell key={index} header={header} />))}
             </DataGridTableHead>
             <DataGridTableBody>
-              {table.getRowModel().rows.length > 0 ? table.getRowModel().rows.map((row, rowIndex) => <DataGridTableBodyRow key={rowIndex} id={row.id} className ="cursor-pointer" onRowClick={onRowClick} data={row}>
+              {table.getRowModel().rows.length > 0 ? table.getRowModel().rows.map((row, rowIndex) => <DataGridTableBodyRow key={rowIndex} id={row.id} onRowClick={onRowClick} data={row}>
                     {row.getVisibleCells().map((cell, cellIndex) => <DataGridTableBodyCell key={cellIndex} id={cell.id} className={cell.column.columnDef.meta?.cellClassName || ''}>
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </DataGridTableBodyCell>)}

@@ -256,8 +256,8 @@ const Teams = () => {
   };
 
   const handleRowClick = (rowData) => {
-    handleSettingsModalOpen();
-    setSelectedId(rowData);
+    // handleSettingsModalOpen();
+    // setSelectedId(rowData);
   };
   return (
     <Fragment>
