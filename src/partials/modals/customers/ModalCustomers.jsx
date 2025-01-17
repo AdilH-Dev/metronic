@@ -52,7 +52,8 @@ const ModalCustomers = forwardRef(({ open, onClose, id = null, callApi }, ref) =
     phoneNo: Yup.string()
       .required('Phone number is required')
       .test('is-valid-phone', 'Invalid phone number', (value) => isPhoneValid(value)),
-    status: Yup.string().required('Status is required'),
+    // status: Yup.string().required('Status is required'),
+    accountant_purchasing_plan_id: Yup.string().required('Package Type is required')
     // package_expiry_date: Yup.string().required('Expires is required')
   });
 
@@ -65,7 +66,7 @@ const ModalCustomers = forwardRef(({ open, onClose, id = null, callApi }, ref) =
     phoneNo: '',
     accountant_purchasing_plan_id: '',
     package_expiry_date: '',
-    status: '1'
+    // status: '1'
   };
 
   const formik = useFormik({
@@ -87,7 +88,7 @@ const ModalCustomers = forwardRef(({ open, onClose, id = null, callApi }, ref) =
       if(values?.package_expiry_date){
         formData.append('package_expiry_date', format(values?.package_expiry_date, 'dd-MM-yyyy'));
       }
-      formData.append('status', values?.status);
+      // formData.append('status', values?.status);
       formData.append('user_type', 'customer');
       if (id) {
         formData.append('id', id);
@@ -137,7 +138,7 @@ const ModalCustomers = forwardRef(({ open, onClose, id = null, callApi }, ref) =
           email: data?.email || '',
           address: data?.address || '',
           phoneNo: data?.phoneNo || '',
-          status: data?.status === '1' ? '1' : '0' || '',
+          // status: data?.status === '1' ? '1' : '0' || '',
           accountant_purchasing_plan_id: data?.accountant_purchasing_plan_id || '',
           package_expiry_date: date ? format(date, 'yyyy-MM-dd') : ''
         });
@@ -474,6 +475,7 @@ const ModalCustomers = forwardRef(({ open, onClose, id = null, callApi }, ref) =
                       {...formik.getFieldProps('accountant_purchasing_plan_id')}
                     >
                       <option value="">Select Package Type</option>
+                      <option value="4">Test Drive</option>
                       <option value="1">Start Pack</option>
                       <option value="2">Pro Pack</option>
                     </select>
@@ -519,18 +521,16 @@ const ModalCustomers = forwardRef(({ open, onClose, id = null, callApi }, ref) =
               </div>
 
               {/* Footer Buttons */}
-              <div className="flex items-center  justify-between py-2">
-                <div className="flex items-center gap-2">
+              <div className="flex items-center  justify-end py-2">
+                {/* <div className="flex items-center gap-2">
                   <label className="switch switch-sm">
                     <span className="switch-label">Active status</span>
                     <input
                       type="checkbox"
                       value="1"
                       name="status"
-                      checked={formik.values.status === '1'} // Check if the value is 1
+                      checked={formik.values.status === '1'}
                       onChange={(e) => formik.setFieldValue('status', e.target.checked ? '1' : '0')}
-                      // readOnly
-                      // {...formik.getFieldProps('status')}
                       className={clsx('form-control', {
                         'is-invalid': formik.touched.status && formik.errors.status
                       })}
@@ -541,7 +541,7 @@ const ModalCustomers = forwardRef(({ open, onClose, id = null, callApi }, ref) =
                       </span>
                     )}
                   </label>
-                </div>
+                </div> */}
                 <div className="flex items-center justify-end gap-2.5">
                   <button
                     onClick={() => {

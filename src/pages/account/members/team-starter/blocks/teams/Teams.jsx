@@ -82,7 +82,7 @@ const Teams = () => {
       enableSorting: false,
       header: () => 'Package Type',
       cell: (info) =>
-        info.getValue() === '1' ? 'Start Pack' : info.getValue() === '2' ? 'Pro Pack' : '',
+        info.getValue() === '1' ? 'Start Pack' : info.getValue() === '2' ? 'Pro Pack' : info.getValue() === '4' ? 'Test Drive' : '',
       meta: {
         className: 'min-w-[120px]',
         cellClassName: 'text-gray-700 font-normal'
