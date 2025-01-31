@@ -1,26 +1,28 @@
-import { Fragment } from 'react';
-import { MiscEngage, MiscFaq, MiscHighlightedPosts } from '@/partials/misc';
-import { toAbsoluteUrl } from '@/utils';
-import { Channels, DoNotDistrub, OtherNotifications } from './blocks';
+// import { Fragment } from 'react';
+// import { MiscEngage, MiscFaq, MiscHighlightedPosts } from '@/partials/misc';
+// import { toAbsoluteUrl } from '@/utils';
+// import { Channels, DoNotDistrub, OtherNotifications, Teams } from './blocks';
+import { Teams } from './blocks';
 const AccountNotificationsContent = () => {
-  const posts = [{
-    icon: 'notification-on',
-    title: 'Streamlined Alerts Setup: Custom Notification Preferences',
-    summary: 'Tailor your alert preferences with our streamlined setup. Stay informed with notifications that matter to you most.',
-    path: '#'
-  }, {
-    icon: 'message-notify',
-    title: 'Effective Communication: Instant Notification Tools',
-    summary: 'Ensure timely communication with our instant notification tools. Customize alerts to stay ahead in real-time collaboration.',
-    path: '#'
-  }, {
-    icon: 'notification-status',
-    title: 'Personalized Updates: Smart Alert System',
-    summary: 'Control how you receive updates with our smart alert system. Personalize notifications for a more efficient workflow.',
-    path: '#'
-  }];
-  return <div className="grid grid-cols-1 xl:grid-cols-3 gap-5 lg:gap-7.5">
-      <div className="col-span-2">
+  // const posts = [{
+  //   icon: 'notification-on',
+  //   title: 'Streamlined Alerts Setup: Custom Notification Preferences',
+  //   summary: 'Tailor your alert preferences with our streamlined setup. Stay informed with notifications that matter to you most.',
+  //   path: '#'
+  // }, {
+  //   icon: 'message-notify',
+  //   title: 'Effective Communication: Instant Notification Tools',
+  //   summary: 'Ensure timely communication with our instant notification tools. Customize alerts to stay ahead in real-time collaboration.',
+  //   path: '#'
+  // }, {
+  //   icon: 'notification-status',
+  //   title: 'Personalized Updates: Smart Alert System',
+  //   summary: 'Control how you receive updates with our smart alert system. Personalize notifications for a more efficient workflow.',
+  //   path: '#'
+  // }];
+  return <div className="grid gap-5 lg:gap-7.5">
+            <Teams />
+      {/* <div className="col-span-2">
         <div className="flex flex-col gap-5 lg:gap-7.5">
           <Channels />
 
@@ -43,7 +45,7 @@ const AccountNotificationsContent = () => {
 
           <MiscHighlightedPosts posts={posts} />
         </div>
-      </div>
+      </div> */}
     </div>;
 };
 export { AccountNotificationsContent };

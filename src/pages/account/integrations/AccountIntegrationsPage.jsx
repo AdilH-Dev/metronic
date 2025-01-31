@@ -11,7 +11,7 @@ const AccountIntegrationsPage = () => {
   return <Fragment>
       <PageNavbar />
 
-      {currentLayout?.name === 'demo1-layout' && <Container>
+      {/* {currentLayout?.name === 'demo1-layout' && <Container>
           <Toolbar>
             <ToolbarHeading>
               <ToolbarPageTitle />
@@ -23,7 +23,7 @@ const AccountIntegrationsPage = () => {
               </a>
             </ToolbarActions>
           </Toolbar>
-        </Container>}
+        </Container>} */}
 
       <Container>
         <AccountIntegrationsContent />

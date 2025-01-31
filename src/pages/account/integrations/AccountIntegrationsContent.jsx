@@ -1,12 +1,15 @@
-import { Fragment } from 'react';
-import { toAbsoluteUrl } from '@/utils';
-import { MiscFaq, MiscHelp2, MiscStarter } from '@/partials/misc';
-import { Integrations } from './blocks';
+// import { Fragment } from 'react';
+// import { toAbsoluteUrl } from '@/utils';
+// import { MiscFaq, MiscHelp2, MiscStarter } from '@/partials/misc';
+// import { Integrations } from './blocks';
+import { Teams } from './blocks';
+
 const AccountIntegrationsContent = () => {
   return <div className="grid gap-5 lg:gap-7.5">
-      <Integrations />
+      <Teams />
+      {/* <Integrations /> */}
 
-      <MiscStarter image={<Fragment>
+      {/* <MiscStarter image={<Fragment>
             <img src={toAbsoluteUrl('/media/illustrations/28.svg')} className="dark:hidden max-h-[230px]" alt="" />
             <img src={toAbsoluteUrl('/media/illustrations/28-dark.svg')} className="light:hidden max-h-[230px]" alt="" />
           </Fragment>} title="Add New Integration" subTitle={<Fragment>
@@ -17,11 +20,11 @@ const AccountIntegrationsContent = () => {
       path: '/network/user-cards/mini-cards',
       label: 'Start Now',
       btnColor: 'btn-primary'
-    }} />
+    }} /> */}
 
-      <MiscFaq />
+      {/* <MiscFaq /> */}
 
-      <MiscHelp2 />
+      {/* <MiscHelp2 /> */}
     </div>;
 };
 export { AccountIntegrationsContent };

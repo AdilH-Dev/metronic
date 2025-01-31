@@ -296,17 +296,17 @@ export const MENU_SIDEBAR = [
         // ]
       },
       {
-        title: 'Compliance',
+        title: 'Payees',
         path: '/account/integrations'
       },
       {
-        title: 'Team',
+        title: 'Users',
         path: '/account/notifications'
       },
-      {
-        title: 'APIs',
-        path: '/account/api-keys'
-      },
+      // {
+      //   title: 'APIs',
+      //   path: '/account/api-keys'
+      // },
 
       {
         title: 'Currencies',
