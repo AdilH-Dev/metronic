@@ -30,8 +30,7 @@ const Layout = () => {
             <div className="flex flex-col gap-3">
               <h3 className="text-2xl font-semibold text-gray-900">Secure Access Portal</h3>
               <div className="text-base font-medium text-gray-600">
-                <span className="text-gray-900 font-semibold">Warning: </span>
-                <br />Unauthorised access can result in
+                <span className="text-gray-900 font-semibold">WARNING: </span>Unauthorised access can result in
                 <br /> criminal prosecution 
                 <br />under applicable law.
                 {/* <br /> secure&nbsp;
