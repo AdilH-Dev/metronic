@@ -31,8 +31,7 @@ const Layout = () => {
               <h3 className="text-2xl font-semibold text-gray-900">Secure Access Portal</h3>
               <div className="text-base font-medium text-gray-600">
                 <span className="text-gray-900 font-semibold">WARNING: </span>Unauthorised access can result in
-                <br /> criminal prosecution 
-                <br />under applicable law.
+                <br /> criminal prosecution under applicable law.
                 {/* <br /> secure&nbsp;
                 &nbsp;to the Metronic
                 <br /> Dashboard interface. */}
