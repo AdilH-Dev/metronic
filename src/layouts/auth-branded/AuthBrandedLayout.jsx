@@ -22,7 +22,7 @@ const Layout = () => {
 
 
         <div className="lg:rounded-xl text-center lg:border lg:border-gray-200 lg:m-5 order-1 lg:order-2 bg-top xxl:bg-center xl:bg-cover bg-no-repeat branded-bg">
-          <div className="flex flex-col px-8 lg:px-8 pt-6 pb-4  gap-4">
+          <div className="flex flex-col px-8 lg:px-8 pt-6 pb-4  gap-4 h-full justify-center">
             <Link to="/">
               <img src={toAbsoluteUrl('/media/app/Senda-line-logo-w.png')} className="h-[28px] max-w-none mx-auto" alt="" />
             </Link>

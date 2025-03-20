@@ -8,44 +8,61 @@ import CustomPagination from '../../../../../../components/data-grid/components/
 import { ContentLoader } from '../../../../../../components/loaders/ContentLoader';
 const BACKEND_API_URL = import.meta.env.VITE_APP_BACKEND_API_URL;
 const BACKEND_IMAGE_URL = import.meta.env.VITE_APP_BACKEND_IMAGE_URL;
+import { formatIsoDate } from '@/utils/Date';
 
 
-const SecurityLog = () => {
+
+const SecurityLog = ({date,toDate,searchTerms}) => {
   const columns = [{
     accessorFn: row => row.updated_at,
     id: 'updated_at',
-    header: () => 'Timestamp',
+    header: () => 'Created',
     enableSorting: false,
-    cell: info => info.getValue(),
+    cell: (info) => formatIsoDate(info.row.original.updated_at),
     meta: {
       className: 'min-w-[200px]'
     }
   }, 
   {
-    accessorFn: row => row.eventType,
-    id: 'eventType',
-    header: () => 'Status',
+    accessorFn: row => row.payee_name,
+    id: 'payee_name',
+    header: () => 'Payee',
     enableSorting: false,
     cell: info => <div className="flex items-center gap-1.5">
             {/* <KeenIcon icon={info.row.original.eventType.icon.name} className={`text-lg ${info.row.original.eventType.icon.variant}`} /> */}
             <span className="leading-none font-semibold text-gray-700">
-              {info.row.original.status}
+              {info.row.original.payee_name}
             </span>
           </div>,
     meta: {
       className: 'min-w-[200px]'
     }
   }, 
-  {
-    accessorFn: row => row.email,
-    id: 'email',
-    header: () => 'Email',
-    enableSorting: false,
-    cell: info => info?.getValue(),
-    meta: {
-      className: 'min-w-[200px]'
-    }
-  }, 
+  // {
+  //   accessorFn: row => row.eventType,
+  //   id: 'eventType',
+  //   header: () => 'Status',
+  //   enableSorting: false,
+  //   cell: info => <div className="flex items-center gap-1.5">
+  //           <KeenIcon icon={info.row.original.eventType.icon.name} className={`text-lg ${info.row.original.eventType.icon.variant}`} />
+  //           <span className="leading-none font-semibold text-gray-700">
+  //             {info.row.original.status}
+  //           </span>
+  //         </div>,
+  //   meta: {
+  //     className: 'min-w-[200px]'
+  //   }
+  // }, 
+  // {
+  //   accessorFn: row => row.email,
+  //   id: 'email',
+  //   header: () => 'Email',
+  //   enableSorting: false,
+  //   cell: info => info?.getValue(),
+  //   meta: {
+  //     className: 'min-w-[200px]'
+  //   }
+  // }, 
   {
     accessorFn: row => row.sending_amount,
     id: 'sending_amount',
@@ -95,7 +112,6 @@ const SecurityLog = () => {
 
 
   // ---------------
-  const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
 
   const [loading, setLoading] = useState(false);
@@ -107,7 +123,7 @@ const SecurityLog = () => {
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      setDebouncedSearchTerm(searchTerm);
+      setDebouncedSearchTerm(searchTerms);
       setCurrentPage(1);
       // Update debounced value after delay
     }, 700); // Adjust debounce delay (e.g., 300ms)
@@ -115,22 +131,22 @@ const SecurityLog = () => {
     return () => {
       clearTimeout(handler); // Clear timeout on component unmount or input change
     };
-  }, [searchTerm]);
+  }, [searchTerms]);
 
   useEffect(() => {
     getPartnerData();
-  }, [debouncedSearchTerm, currentPage, pageSize]);
+  }, [debouncedSearchTerm, currentPage, pageSize,date,toDate]);
 
   const getPartnerData = async () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        `${BACKEND_API_URL}accountant-users/transaction-listing?pageNumber=${currentPage}&perPage=${pageSize}&search_data=${searchTerm}`
+        `${BACKEND_API_URL}accountant-users/transaction-listing?pageNumber=${currentPage}&perPage=${pageSize}&search=${searchTerms.search1}&payee=${searchTerms.search2}&from_date=${date}&to_date=${toDate}`
       );
       if (response?.data?.success === true) {
         // toast.success(response?.data?.message);
         setPartnerData(response?.data?.data?.data);
-        console.log(response?.data?.data?.total, 'latetstst');
+        // console.log(response?.data?.data?.total, 'latetstst');
         setTotalRecords(response?.data?.data?.last_page);
       }
     } catch (error) {
@@ -149,7 +165,6 @@ const SecurityLog = () => {
     setCurrentPage(1); // Reset to the first page to avoid invalid page numbers
   };
 
-  console.log(partnerData,"partnerDatapartnerDatapartnerData")
   return <div className="card card-grid min-w-full">
       <div className="card-header py-5 flex-wrap">
         <h3 className="card-title">Transactions</h3>
@@ -177,7 +192,7 @@ const SecurityLog = () => {
               columns={columns}
               data={partnerData}
               serverSide={true}
-              rowSelect={true}
+              rowSelect={false}
               pagination={false}
               // onRowClick={handleRowClick}
               // search ={false}

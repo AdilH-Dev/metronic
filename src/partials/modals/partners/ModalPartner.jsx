@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useState } from 'react';
+import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import { Modal, ModalContent, ModalBody, ModalHeader, ModalTitle } from '@/components/modal';
 import { KeenIcon } from '@/components';
 import { useFormik } from 'formik';
@@ -7,6 +7,7 @@ import clsx from 'clsx';
 import { ImageInput } from '@/components/image-input';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { parse, format } from 'date-fns';
 const BACKEND_API_URL = import.meta.env.VITE_APP_BACKEND_API_URL;
 const BACKEND_IMAGE_URL = import.meta.env.VITE_APP_BACKEND_IMAGE_URL;
 
@@ -44,9 +45,9 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
       .max(50, 'Maximum 50 symbols')
       .required('Email is required'),
     address: Yup.string().required('Address is required'),
-    password: Yup.string()
-      .matches(/^\d{4}$/, 'Must be 4 digits') // Allow only 4 digits
-      .required('Key is required'),
+    // password: Yup.string()
+    //   .matches(/^\d{4}$/, 'Must be 4 digits') // Allow only 4 digits
+    //   .required('Key is required'),
     company_no: Yup.string()
       .matches(/^\d{8}$/, 'Must be 8 digits') // Allow only 8 digits
       .required('Company no is required'),
@@ -68,7 +69,8 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
     name: '',
     phoneNo: '',
     logo: null,
-    company_no: ''
+    company_no: '',
+    branding_recieve_date: ''
   };
 
   const formik = useFormik({
@@ -87,6 +89,13 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
       formData.append('name', values?.name);
       formData.append('phoneNo', values?.phoneNo);
       formData.append('company_no', values?.company_no);
+      if (values?.branding_recieve_date) {
+        formData.append(
+          'branding_recieve_date',
+          format(values?.branding_recieve_date, 'yyyy-MM-dd')
+        );
+      }
+      // formData.append('branding_recieve_date', values?.branding_recieve_date);
       formData.append('user_type', 'partner');
       if (id) {
         formData.append('id', id);
@@ -134,6 +143,7 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
           name: data?.name || '',
           phoneNo: data?.phoneNo || '',
           company_no: data?.company_number || '',
+          branding_recieve_date: data?.branding_recieve_date || '',
           logo: logoValue.length > 0 ? logoValue[0] : null // Set formik value
         });
 
@@ -169,6 +179,7 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
         formik.setValues({
           company_name: '',
           company_no: '',
+          branding_recieve_date: '',
           email: '',
           address: '',
           name: '',
@@ -189,6 +200,17 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
     // Prevent default behavior and stop event propagation
     event.preventDefault();
     event.stopPropagation();
+  };
+
+  const dateInputRef = useRef(null);
+  const openDatePicker = () => {
+    if (dateInputRef.current) {
+      try {
+        dateInputRef.current.showPicker(); // Modern browsers
+      } catch (error) {
+        dateInputRef.current.focus(); // Fallback for older browsers
+      }
+    }
   };
 
   return (
@@ -265,7 +287,7 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
                 >
                   {({ onImageUpload }) => (
                     <div
-                      className="flex items-center gap-4 border-[#464852] border rounded-[0.375rem] h-[39px] px-[12px] cursor-pointer bg-[#1f212a]"
+                      className="flex items-center gap-4 border-[#464852] border rounded-[0.375rem] h-[39px] ps-[12px] cursor-pointer bg-[#1f212a]"
                       onClick={onImageUpload}
                     >
                       {logo.length > 0 ? (
@@ -282,7 +304,7 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
                       <span className="text-[#787a88] text-[13px] font-medium">
                         {logo.length > 0 ? 'Change Logo' : 'Upload Logo'}
                       </span>
-                      <button
+                      {/* <button
                         type="button"
                         className="ml-auto btn btn-sm btn-light"
                         onClick={(e) => {
@@ -292,14 +314,39 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
                         }}
                       >
                         Remove
-                      </button>
+                      </button> */}
+                      <label className="input ml-auto border-0 w-[150px] h-[39px] border-t border-b border-r rounded-r-[0.375rem] rounded-l-[0px] relative border-[#464852]">
+                        <input
+                          // type={showPassword ? 'text' : 'password'}
+                          type="date"
+                          placeholder=""
+                          ref={dateInputRef}
+                          autoComplete="off"
+                          {...formik.getFieldProps('branding_recieve_date')}
+                          className={clsx('form-control', {
+                            'is-invalid':
+                              formik.touched.branding_recieve_date &&
+                              formik.errors.branding_recieve_date
+                          })}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openDatePicker();
+                          }}
+                        />
+
+                        <span
+                          className="absolute right-[10px] top-1/2 transform -translate-y-1/2 text-orange-500 peer-focus:text-blue-600"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openDatePicker();
+                          }}
+                        >
+                          📅
+                        </span>
+                      </label>
                     </div>
                   )}
                 </ImageInput>
-                <div>
-                  <span className="text-[#787a88] text-[13px]">Size: 47x47 px</span>
-                  <span className="text-[#787a88] text-[13px] ms-4">Types: JPG, JPEG, PNG</span>
-                </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Name Field */}
@@ -343,8 +390,8 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
                         'is-invalid': formik.touched.email && formik.errors.email
                       })}
                     />
-                                         <img
-                     onClick={handleSmsIconClick}
+                    <img
+                      onClick={handleSmsIconClick}
                       className="h-[20px] w-[20px] cursor-pointer"
                       src="/media/brand-logos/emailIcon.png"
                       alt=""
@@ -437,7 +484,7 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
                       }}
                     />
                     <img
-                     onClick={handleSmsIconClick}
+                      onClick={handleSmsIconClick}
                       className="h-[20px] w-[20px] absolute right-[12px] cursor-pointer"
                       src="/media/brand-logos/smsIcon.png"
                       alt=""

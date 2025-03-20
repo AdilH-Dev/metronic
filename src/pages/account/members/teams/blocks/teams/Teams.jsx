@@ -29,6 +29,25 @@ const Teams = () => {
   // const storageFilterId = 'teams-filter';
   const columns = [
     {
+      accessorFn: (row) => row?.branding_status,
+      id: 'branding_status',
+      header: () => 'Branding',
+      enableSorting: false,
+      cell: (info) => (
+          <input
+            type="checkbox"
+            className="checkbox checkbox-sm disabled"
+            checked={info?.row?.original?.branding_status === 1}
+            readOnly
+            // onChange={() => changeStatus(rowId)}
+          />
+      ),
+      meta: {
+        className: 'min-w-[0px]',
+        cellClassName: 'text-gray-700 font-normal'
+      }
+    },
+    {
       accessorFn: (row) => row?.company_name,
       id: 'company_name',
       header: () => 'Business Name',
@@ -104,6 +123,17 @@ const Teams = () => {
       // <CommonAvatars size="size-[30px]" group={info.row.original.members.group} more={info.row.original.members.more} />,
       meta: {
         className: 'min-w-[100px]',
+        cellClassName: 'text-gray-700 font-normal'
+      }
+    },
+    {
+      accessorFn: (row) => row.branding_expiry_date,
+      id: 'branding_expiry_date',
+      enableSorting: false,
+      header: () => 'Expiry Date',
+      cell: (info) => info.getValue(),
+      meta: {
+        className: 'min-w-[120px]',
         cellClassName: 'text-gray-700 font-normal'
       }
     },
@@ -325,7 +355,7 @@ const Teams = () => {
               columns={columns}
               data={partnerData}
               serverSide={true}
-              rowSelect={true}
+              rowSelect={false}
               pagination={false}
               onRowClick={handleRowClick}
               // search ={false}

@@ -26,7 +26,51 @@ const BACKEND_IMAGE_URL = import.meta.env.VITE_APP_BACKEND_IMAGE_URL;
 const Teams = () => {
   const { currentLayout } = useLayout();
   // const storageFilterId = 'teams-filter';
+  
   const columns = [
+    {
+      accessorFn: (row) => row?.branding_status,
+      id: 'branding_status',
+      header: () => 'Branding',
+      enableSorting: false,
+      cell: (info) => {
+        const rowId = info?.row?.original?.id; // Get row ID
+
+    return loadingRows[rowId]? (
+          <svg
+            className="animate-spin -ml-1 h-5 w-5 text-gray-600"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="3"
+            ></circle>
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+        ) : (
+          <input
+            type="checkbox"
+            className="checkbox checkbox-sm cursor-pointer"
+            checked={info?.row?.original?.branding_status === 1}
+            onChange={() => changeStatus(rowId)}
+          />
+        );
+      },
+      meta: {
+        className: 'min-w-[0px]',
+        cellClassName: 'text-gray-700 font-normal'
+      }
+    },
     {
       accessorFn: (row) => row?.company_name,
       id: 'company_name',
@@ -194,6 +238,7 @@ const Teams = () => {
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
 
   const [loading, setLoading] = useState(false);
+  const [loadingRows, setLoadingRows] = useState({});
   const [partnerData, setPartnerData] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -259,6 +304,30 @@ const Teams = () => {
     // handleSettingsModalOpen();
     // setSelectedId(rowData);
   };
+  const changeStatus = async (rowData) => {
+    setLoadingRows((prev) => ({ ...prev, [rowData]: true }));
+    const branding = partnerData?.find((item) => item.id === rowData)?.branding_status;
+    const payload = {
+      customer_id: rowData,
+      branding_status: branding === 1 ? 0 : 1,
+    };
+    try {
+      const response = await axios.post(
+        `${BACKEND_API_URL}extension-users/customers-branding-status`
+        , payload
+      );
+      if (response?.data?.success === true) {
+        getPartnerData();
+        toast.success(response?.data?.message);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+      console.log('error', error);
+    } finally {
+      setLoadingRows((prev) => ({ ...prev, [rowData]: false }));
+    }
+  };
+
   return (
     <Fragment>
       {currentLayout?.name === 'demo1-layout' && (
@@ -321,7 +390,7 @@ const Teams = () => {
               columns={columns}
               data={partnerData}
               serverSide={true}
-              rowSelect={true}
+              rowSelect={false}
               pagination={false}
               onRowClick={handleRowClick}
               // search ={false}

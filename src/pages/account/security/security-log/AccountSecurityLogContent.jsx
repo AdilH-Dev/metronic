@@ -1,10 +1,54 @@
 import { MiscHelp } from '@/partials/misc';
 import { SecurityLog } from './blocks';
-const AccountSecurityLogContent = () => {
-  return <div className="grid gap-5 lg:gap-7.5">
-      <SecurityLog />
+const AccountSecurityLogContent = ({date,toDate,searchTerms}) => {
+  const jsonData = {
+    "headers": {
+        "Authorization": "Bearer YOUR_ACCESS_TOKEN",
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Request-Id": "123e4567-e89b-12d3-a456-426614174000"
+    },
+    "body": {
+        "InstructionIdentification": "TXN123456789",
+        "EndToEndIdentification": "PaymentForInvoice123",
+        "InstructedAmount": {
+            "Amount": "1000.00",
+            "Currency": "EUR"
+        },
+        "DebtorAccount": {
+            "SchemeName": "IBAN",
+            "Identification": "GB29NWBK60161331926819"
+        },
+        "CreditorAccount": {
+            "SchemeName": "IBAN",
+            "Identification": "DE89370400440532013000"
+        },
+        "CreditorName": "John Doe",
+        "RemittanceInformation": "Invoice 12345 Payment"
+    }
+};
+  return (
+    <div className="grid gap-5 lg:gap-7.5">
+      <div className="grid gap-5 lg:gap-7.5 lg:grid-cols-2">
+        <SecurityLog date={date} toDate={toDate} searchTerms={searchTerms} />
+        <div className="card card-grid min-w-full">
+          <div className="card-header py-5 flex-wrap">
+            <h3 class="card-title">JSON Data</h3>
+          </div>
+          <div class="card-body">
+            <div class="grid min-w-full">
+              <div class="scrollable-x-auto">
+                <pre className='p-5'>
+                  <code>{JSON.stringify(jsonData, null, 2)}</code>
+                </pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <MiscHelp />
-    </div>;
+      {/* <MiscHelp /> */}
+    </div>
+  );
 };
 export { AccountSecurityLogContent };
