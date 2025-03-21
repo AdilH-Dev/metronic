@@ -31,7 +31,7 @@ const Teams = () => {
     {
       accessorFn: (row) => row?.branding_status,
       id: 'branding_status',
-      header: () => 'Branding',
+      header: () => 'Label',
       enableSorting: false,
       cell: (info) => {
         const rowId = info?.row?.original?.id; // Get row ID

@@ -6,12 +6,12 @@ const Footer = () => {
       <Container>
         <div className="flex flex-col md:flex-row justify-center md:justify-between items-center gap-2 py-5">
           <div className="flex gap-2 font-normal text-2sm">
-            <span className="text-gray-500">{currentYear} &copy;</span>
-            <a href="https://keenthemes.com" target="_blank" className="text-gray-600 hover:text-primary">
+            <span className="text-white">&copy; 2024 Senda Ventures Ltd. All rights reserved. Used under license</span>
+            {/* <a href="https://keenthemes.com" target="_blank" className="text-gray-600 hover:text-primary">
               Keenthemes Inc.
-            </a>
+            </a> */}
           </div>
-          <nav className="flex gap-2 font-normal text-2sm text-gray-600">
+          {/* <nav className="flex gap-2 font-normal text-2sm text-gray-600">
             <a href={generalSettings.aboutLink} target="_blank" className="hover:text-primary">
               About
             </a>
@@ -24,7 +24,7 @@ const Footer = () => {
             <a href={generalSettings.purchaseLink} target="_blank" className="hover:text-primary">
               Purchase
             </a>
-          </nav>
+          </nav> */}
         </div>
       </Container>
     </footer>;

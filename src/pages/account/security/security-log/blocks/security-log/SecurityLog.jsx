@@ -12,7 +12,7 @@ import { formatIsoDate } from '@/utils/Date';
 
 
 
-const SecurityLog = ({date,toDate,searchTerms}) => {
+const SecurityLog = ({date,toDate,searchTerms,setLoading2,setJsonData}) => {
   const columns = [{
     accessorFn: row => row.updated_at,
     id: 'updated_at',
@@ -20,7 +20,7 @@ const SecurityLog = ({date,toDate,searchTerms}) => {
     enableSorting: false,
     cell: (info) => formatIsoDate(info.row.original.updated_at),
     meta: {
-      className: 'min-w-[200px]'
+      className: 'min-w-[130px]'
     }
   }, 
   {
@@ -28,7 +28,11 @@ const SecurityLog = ({date,toDate,searchTerms}) => {
     id: 'payee_name',
     header: () => 'Payee',
     enableSorting: false,
-    cell: info => <div className="flex items-center gap-1.5">
+    cell: info => <div className="flex items-center gap-1.5 cursor-pointer"
+    onClick={() => {
+      getJsonData(info?.row?.original?.id);
+    }}
+    >
             {/* <KeenIcon icon={info.row.original.eventType.icon.name} className={`text-lg ${info.row.original.eventType.icon.variant}`} /> */}
             <span className="leading-none font-semibold text-gray-700">
               {info.row.original.payee_name}
@@ -165,6 +169,29 @@ const SecurityLog = ({date,toDate,searchTerms}) => {
     setCurrentPage(1); // Reset to the first page to avoid invalid page numbers
   };
 
+  const getJsonData = async (id) => {
+    setLoading2(true);
+    try {
+      const response = await axios.get(
+        `${BACKEND_API_URL}accountant-users/transaction-json?id=${id}`
+      );
+      if (response?.data?.success === true) {
+        setJsonData(response?.data?.data);
+        // toast.success(response?.data?.message);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+      console.log('error', error);
+    } finally {
+      setLoading2(false);
+    }
+  };
+
+  const handleRowClick = (rowData) => {
+    // handleSettingsModalOpen();
+    // setSelectedId(rowData);
+  };
+
   return <div className="card card-grid min-w-full">
       <div className="card-header py-5 flex-wrap">
         <h3 className="card-title">Transactions</h3>
@@ -194,7 +221,7 @@ const SecurityLog = ({date,toDate,searchTerms}) => {
               serverSide={true}
               rowSelect={false}
               pagination={false}
-              // onRowClick={handleRowClick}
+              onRowClick={handleRowClick}
               // search ={false}
               // pagination={{
               //   size: pageSize,
