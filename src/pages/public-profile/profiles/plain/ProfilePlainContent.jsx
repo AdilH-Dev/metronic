@@ -3,7 +3,7 @@ import { Tags } from '../default';
 import { AboutMe, GettingStarted, OpenToWork } from './blocks';
 const ProfilePlainContent = () => {
   const items = [{
-    number: '249',
+    number: '249f',
     label: 'Connections'
   }, {
     number: '1.2k',

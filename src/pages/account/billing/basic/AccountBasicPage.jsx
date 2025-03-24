@@ -4,6 +4,7 @@ import { Toolbar, ToolbarActions, ToolbarDescription, ToolbarHeading, ToolbarPag
 import { PageNavbar } from '@/pages/account';
 import { AccountBasicContent } from '.';
 import { useLayout } from '@/providers';
+import { Statistics } from '../../../public-profile/profiles/company';
 const AccountBasicPage = () => {
   const {
     currentLayout
@@ -15,13 +16,13 @@ const AccountBasicPage = () => {
           <Toolbar>
             <ToolbarHeading>
               <ToolbarPageTitle />
-              <ToolbarDescription>Central Hub for Personal Customization</ToolbarDescription>
+              {/* <ToolbarDescription>Central Hub for Personal Customization</ToolbarDescription> */}
             </ToolbarHeading>
-            <ToolbarActions>
+            {/* <ToolbarActions>
               <a href="#" className="btn btn-sm btn-light">
                 Order History
               </a>
-            </ToolbarActions>
+            </ToolbarActions> */}
           </Toolbar>
         </Container>}
 
