@@ -314,7 +314,7 @@ const Teams = () => {
               columns={columns}
               data={partnerData}
               serverSide={true}
-              rowSelect={true}
+              rowSelect={false}
               pagination={false}
               onRowClick={handleRowClick}
               // search ={false}

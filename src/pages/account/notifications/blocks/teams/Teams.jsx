@@ -37,11 +37,11 @@ const Teams = () => {
       cell: (info) => {
         return (
           <div
-            className="flex flex-col gap-2 cursor-pointer"
-            onClick={() => {
-              handleSettingsModalOpen();
-              setSelectedId(info?.row?.original?.customer_id);
-            }}
+            className="flex flex-col gap-2 "
+            // onClick={() => {
+            //   handleSettingsModalOpen();
+            //   setSelectedId(info?.row?.original?.customer_id);
+            // }}
           >
             <span className="leading-none font-medium text-sm text-gray-900">
               {info?.row?.original?.company_name}
@@ -290,7 +290,7 @@ const Teams = () => {
               columns={columns}
               data={partnerData}
               serverSide={true}
-              rowSelect={true}
+              rowSelect={false}
               pagination={false}
               onRowClick={handleRowClick}
               // search ={false}

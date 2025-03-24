@@ -304,11 +304,11 @@ const Teams = () => {
                 Efficient team organization with real-time updates
               </ToolbarDescription> */}
             </ToolbarHeading>
-            <ToolbarActions>
+            {/* <ToolbarActions>
               <a href="#" className="btn btn-sm btn-light" onClick={handleSettingsModalOpen}>
                 Add Partner
               </a>
-            </ToolbarActions>
+            </ToolbarActions> */}
           </Toolbar>
         </Container>
       )}
