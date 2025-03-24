@@ -5,19 +5,19 @@ const Highlights = ({
 }) => {
   const rows = [{
     icon: 'shop',
-    text: 'Online Store',
+    text: 'Confirmed',
     total: 172,
     stats: 3.9,
     increase: true
   }, {
     icon: 'facebook',
-    text: 'Facebook',
+    text: 'Failed',
     total: 85,
     stats: 0.7,
     increase: false
   }, {
     icon: 'instagram',
-    text: 'Instagram',
+    text: 'Processing',
     total: 36,
     stats: 8.2,
     increase: true
@@ -36,13 +36,13 @@ const Highlights = ({
   }];
   const items = [{
     badgeColor: 'badge-success',
-    lebel: 'Metronic'
+    lebel: 'Confirmed'
   }, {
     badgeColor: 'badge-danger',
-    lebel: 'Bundle'
+    lebel: 'Failed'
   }, {
     badgeColor: 'badge-info',
-    lebel: 'MetronicNest'
+    lebel: 'Processing'
   }];
   const renderRow = (row, index) => {
     return <div key={index} className="flex items-center justify-between flex-wrap gap-2">
@@ -68,7 +68,7 @@ const Highlights = ({
   };
   return <div className="card h-full">
       <div className="card-header">
-        <h3 className="card-title">Highlights</h3>
+        <h3 className="card-title">Transaction Volume</h3>
 
         <Menu className="items-stretch">
           <MenuItem toggle="dropdown" trigger="click" dropdownProps={{
@@ -90,7 +90,7 @@ const Highlights = ({
 
       <div className="card-body flex flex-col gap-4 p-5 lg:p-7.5 lg:pt-4">
         <div className="flex flex-col gap-0.5">
-          <span className="text-sm font-normal text-gray-700">All time sales</span>
+          <span className="text-sm font-normal text-gray-700">Month to date</span>
 
           <div className="flex items-center gap-2.5">
             <span className="text-3xl font-semibold text-gray-900">$295.7k</span>
