@@ -77,7 +77,7 @@ const Connections = ({
       </div>
 
       <div className="card-footer justify-center">
-        <Link to="/public-profile/network" className="btn btn-link">
+        <Link to="/account/notifications" className="btn btn-link">
           All team members
         </Link>
       </div>
