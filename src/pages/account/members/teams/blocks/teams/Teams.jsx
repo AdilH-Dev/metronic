@@ -33,7 +33,8 @@ const Teams = () => {
       id: 'branding_status',
       header: () => 'Label',
       enableSorting: false,
-      cell: (info) => (
+      cell: (info) =>
+        info?.row?.original?.key && (
           <input
             type="checkbox"
             className="checkbox checkbox-sm disabled"
@@ -41,7 +42,7 @@ const Teams = () => {
             readOnly
             // onChange={() => changeStatus(rowId)}
           />
-      ),
+        ),
       meta: {
         className: 'min-w-[0px]',
         cellClassName: 'text-gray-700 font-normal'
@@ -80,12 +81,7 @@ const Teams = () => {
       id: 'company_number',
       enableSorting: false,
       header: () => 'Company No',
-      cell: (info) => (
-        <div
-        >
-          {info.getValue()}
-        </div>
-      ),
+      cell: (info) => <div>{info.getValue()}</div>,
       meta: {
         className: 'min-w-[120px]',
         cellClassName: 'text-gray-700 font-normal'
