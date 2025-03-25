@@ -45,9 +45,12 @@ const ModalPartner = forwardRef(({ open, onClose, id = null, callApi }, ref) => 
       .max(50, 'Maximum 50 symbols')
       .required('Email is required'),
     address: Yup.string().required('Address is required'),
-    // password: Yup.string()
-    //   .matches(/^\d{4}$/, 'Must be 4 digits') // Allow only 4 digits
-    //   .required('Key is required'),
+    password: Yup.string()
+    .test(
+      'isValidPassword',
+      'Must be 4 digits',
+      (value) => !value || /^\d{4}$/.test(value) // Only validate if value exists
+    ),
     company_no: Yup.string()
       .matches(/^\d{8}$/, 'Must be 8 digits') // Allow only 8 digits
       .required('Company no is required'),
