@@ -4,11 +4,11 @@ export const MENU_SIDEBAR = [
     icon: 'element-11',
     children: [
       {
-        title: 'Senda Operations',
+        title: 'Dashboard',
         path: '/'
       },
       {
-        title: 'Senda Operations',
+        title: 'Dashboard',
         path: '/dark-sidebar'
       }
     ]
