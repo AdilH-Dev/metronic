@@ -43,11 +43,11 @@ const AccountSecurityLogContent = ({ date, toDate, searchTerms }) => {
         />
         <div className="card card-grid min-w-full">
           <div className="card-header py-5 flex-wrap">
-            <h3 class="card-title">JSON Data</h3>
+            <h3 className="card-title">JSON Data</h3>
           </div>
-          <div class="card-body">
-            <div class="grid min-w-full">
-              <div class="scrollable-x-auto">
+          <div className="card-body">
+            <div className="grid min-w-full">
+              <div className="scrollable-x-auto">
                 {loading2 ? (
                   <div className="text-center flex justify-center py-2 border-0">
                     <ContentLoader />

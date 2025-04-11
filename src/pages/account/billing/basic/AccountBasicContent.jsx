@@ -1,5 +1,20 @@
 import { MiscHighlightedPosts } from '@/partials/misc';
-import { Details, Invoicing, PaymentMethods, Plan ,Statistics,Connections,Contributions,Highlights} from './blocks';
+import {
+  Details,
+  Invoicing,
+  PaymentMethods,
+  Plan,
+  Statistics,
+  Connections,
+  Contributions,
+  Highlights
+} from './blocks';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import axios from 'axios';
+import { ContentLoader } from '../../../../components/loaders/ContentLoader';
+const BACKEND_API_URL = import.meta.env.VITE_APP_BACKEND_API_URL;
+
 const AccountBasicContent = () => {
   const posts = [
     {
@@ -42,10 +57,39 @@ const AccountBasicContent = () => {
       label: 'Founder'
     }
   ];
+
+  const [loading, setLoading] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
+  const getStatus = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`${BACKEND_API_URL}get-founding-member-setting`);
+      if (response?.data?.success === true) {
+        const checked = response?.data?.data === '1' ? true : false;
+        setIsChecked(checked);
+        // toast.success(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+      console.log('error', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    getStatus();
+  }, []);
+
   return (
     <div className="grid grid-cols-1 xl:grid-cols-3 gap-5 lg:gap-7.5">
       <div className="col-span-3">
-        <Statistics items={items} />
+        {loading ? (
+          <div className="border text-center flex justify-center py-2">
+            <ContentLoader />
+          </div> // Show loader while fetching data
+        ) : (
+          <Statistics items={items} defaultValue={isChecked} />
+        )}
       </div>
       <div className="col-span-1">
         <Connections title="Contributors" />
