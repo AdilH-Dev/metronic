@@ -52,7 +52,7 @@ const ModalCustomers = forwardRef(({ open, onClose, id = null, callApi }, ref) =
     phoneNo: Yup.string()
       .required('Phone number is required')
       .test('is-valid-phone', 'Invalid phone number', (value) => isPhoneValid(value)),
-    // status: Yup.string().required('Status is required'),
+    status: Yup.string().required('Status is required'),
     accountant_purchasing_plan_id: Yup.string().required('Package Type is required')
     // package_expiry_date: Yup.string().required('Expires is required')
   });
@@ -66,7 +66,7 @@ const ModalCustomers = forwardRef(({ open, onClose, id = null, callApi }, ref) =
     phoneNo: '',
     accountant_purchasing_plan_id: '',
     package_expiry_date: '',
-    // status: '1'
+    status: '0'
   };
 
   const formik = useFormik({
@@ -88,7 +88,7 @@ const ModalCustomers = forwardRef(({ open, onClose, id = null, callApi }, ref) =
       if(values?.package_expiry_date){
         formData.append('package_expiry_date', format(values?.package_expiry_date, 'dd-MM-yyyy'));
       }
-      // formData.append('status', values?.status);
+      formData.append('founder', values?.status);
       formData.append('user_type', 'customer');
       if (id) {
         formData.append('id', id);
@@ -104,7 +104,7 @@ const ModalCustomers = forwardRef(({ open, onClose, id = null, callApi }, ref) =
         if (response?.data?.success === true) {
           toast.success(response?.data?.message);
           onClose();
-          console.log('Form submitted', response?.data);
+          // console.log('Form submitted', response?.data);
           formik.resetForm();
           callApi();
         }
@@ -124,7 +124,7 @@ const ModalCustomers = forwardRef(({ open, onClose, id = null, callApi }, ref) =
       const response = await axios.get(`${BACKEND_API_URL}extension-users/edit_data/${passId}`);
       if (response?.data?.success === true) {
         const data = response?.data?.data;
-        console.log(data?.package_expiry_date);
+        // console.log(data?.package_expiry_date);
         let date;
         if (data?.package_expiry_date) {
           date = parse(data?.package_expiry_date, 'dd-MM-yyyy', new Date());
@@ -138,7 +138,7 @@ const ModalCustomers = forwardRef(({ open, onClose, id = null, callApi }, ref) =
           email: data?.email || '',
           address: data?.address || '',
           phoneNo: data?.phoneNo || '',
-          // status: data?.status === '1' ? '1' : '0' || '',
+          status: data?.founder === '1' ? '1' : '0' || '',
           accountant_purchasing_plan_id: data?.accountant_purchasing_plan_id || '',
           package_expiry_date: date ? format(date, 'yyyy-MM-dd') : ''
         });
@@ -160,7 +160,7 @@ const ModalCustomers = forwardRef(({ open, onClose, id = null, callApi }, ref) =
   }, [id]);
 
   // console.log(formik.errors,"errorooroor")
-  console.log(formik.values, 'valuesssss');
+  // console.log(formik.values, 'valuesssss');
 
   const handleSmsIconClick = (event) => {
     // Prevent default behavior and stop event propagation
@@ -522,9 +522,9 @@ const ModalCustomers = forwardRef(({ open, onClose, id = null, callApi }, ref) =
 
               {/* Footer Buttons */}
               <div className="flex items-center  justify-end py-2">
-                {/* <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-grow">
                   <label className="switch switch-sm">
-                    <span className="switch-label">Active status</span>
+                    {/* <span className="switch-label">Active status</span> */}
                     <input
                       type="checkbox"
                       value="1"
@@ -541,7 +541,7 @@ const ModalCustomers = forwardRef(({ open, onClose, id = null, callApi }, ref) =
                       </span>
                     )}
                   </label>
-                </div> */}
+                </div>
                 <div className="flex items-center justify-end gap-2.5">
                   <button
                     onClick={() => {

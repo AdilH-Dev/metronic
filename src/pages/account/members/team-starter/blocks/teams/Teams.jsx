@@ -133,6 +133,17 @@ const Teams = () => {
       }
     },
     {
+      accessorFn: (row) => row.founder,
+      id: 'founder',
+      enableSorting: false,
+      header: () => 'Founder',
+      cell: (info) => info.getValue(),
+      meta: {
+        className: 'min-w-[120px]',
+        cellClassName: 'text-gray-700 font-normal'
+      }
+    },
+    {
       accessorFn: (row) => row.package_expiry_date,
       id: 'package_expiry_date',
       enableSorting: false,
@@ -270,7 +281,7 @@ const Teams = () => {
       if (response?.data?.success === true) {
         // toast.success(response?.data?.message);
         setPartnerData(response?.data?.data?.data);
-        console.log(response?.data?.data?.total, 'latetstst');
+        // console.log(response?.data?.data?.total, 'latetstst');
         setTotalRecords(response?.data?.data?.last_page);
       }
     } catch (error) {

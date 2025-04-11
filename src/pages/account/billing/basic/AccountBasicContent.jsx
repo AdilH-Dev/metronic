@@ -39,37 +39,22 @@ const AccountBasicContent = () => {
       path: '#'
     }
   ];
-  const items = [
-    {
-      number: '624',
-      label: 'Partners'
-    },
-    {
-      number: '60.7M',
-      label: 'Branded'
-    },
-    {
-      number: '369M',
-      label: 'Customer'
-    },
-    {
-      number: '27',
-      label: 'Founder'
-    }
-  ];
 
   const [loading, setLoading] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const [cardData, setCardData] = useState({});
   const getStatus = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${BACKEND_API_URL}get-founding-member-setting`);
+      const response = await axios.get(`${BACKEND_API_URL}extension-users/dashboard`);
       if (response?.data?.success === true) {
-        const checked = response?.data?.data === '1' ? true : false;
+        const checked = response?.data?.data?.FounderToggle === '1' ? true : false;
         setIsChecked(checked);
+        setCardData(response?.data?.data);
         // toast.success(response.data.message);
       }
     } catch (error) {
+      setCardData({});
       toast.error(error?.response?.data?.message);
       console.log('error', error);
     } finally {
@@ -79,6 +64,25 @@ const AccountBasicContent = () => {
   useEffect(() => {
     getStatus();
   }, []);
+
+  const items = [
+    {
+      number: cardData?.total_partners || '0',
+      label: 'Partners'
+    },
+    {
+      number: cardData?.total_branded_partners || '0',
+      label: 'Branded'
+    },
+    {
+      number: cardData?.total_customers || '0',
+      label: 'Customer'
+    },
+    {
+      number: cardData?.total_founders || '0',
+      label: 'Founder'
+    }
+  ];
 
   return (
     <div className="grid grid-cols-1 xl:grid-cols-3 gap-5 lg:gap-7.5">
